@@ -512,46 +512,6 @@
             white-space: nowrap;
         }
 
-        .item-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            max-height: 29px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            min-height: 25px;
-            padding: 0 8px;
-            color: #A7B7C8;
-            border: 1px solid rgba(103, 232, 255, 0.16);
-            background: rgba(3, 8, 14, 0.34);
-            font-size: 13px;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-
-        .tag.green {
-            color: #A7FF5A;
-            border-color: rgba(167, 255, 90, 0.34);
-            background: rgba(167, 255, 90, 0.08);
-        }
-
-        .tag.blue {
-            color: #25D7FF;
-            border-color: rgba(37, 215, 255, 0.38);
-            background: rgba(37, 215, 255, 0.08);
-        }
-
-        .tag.amber {
-            color: #FFB84A;
-            border-color: rgba(255, 184, 74, 0.38);
-            background: rgba(255, 184, 74, 0.08);
-        }
-
         .card-actions {
             display: grid;
             grid-template-columns: minmax(96px, 1fr) auto auto;
@@ -1817,13 +1777,6 @@
                 });
             }
 
-            function createTag(value, kind) {
-                var tag = document.createElement("span");
-                tag.className = "tag" + (kind ? " " + kind : "");
-                tag.textContent = value;
-                return tag;
-            }
-
             function renderTextureBox(item) {
                 var box = document.createElement("div");
                 var normalized = normalizeTexturePath(item.image || "");
@@ -2009,7 +1962,6 @@
                         var card = document.createElement("article");
                         var body = document.createElement("div");
                         var name = document.createElement("div");
-                        var meta = document.createElement("div");
                         var actions = document.createElement("div");
                         var price = document.createElement("div");
                         var add = document.createElement("button");
@@ -2024,16 +1976,7 @@
                         body.className = "card-body";
                         name.className = "item-name";
                         name.textContent = item.name;
-                        meta.className = "item-meta";
-                        meta.appendChild(createTag(categoryLabel(item.category), "blue"));
-                        meta.appendChild(createTag(previewTarget(item), "green"));
-                        meta.appendChild(createTag(item.entryKind === "ticket" ? "Tickets" : (isVehicle(item) ? "Vehicle" : "Equipment"), ""));
-                        if (ticketLocked) {
-                            meta.appendChild(createTag("Commander", "amber"));
-                        }
-
                         body.appendChild(name);
-                        body.appendChild(meta);
 
                         actions.className = "card-actions";
                         price.className = "card-price";
