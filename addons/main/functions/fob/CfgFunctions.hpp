@@ -4,9 +4,14 @@ class FOB {
     class fobCanBuildAt {};
     class fobCanBuildNearPlayer {};
     class fobAddClientAction {};
+    class fobAddDeployWebEventHandler {};
     class fobBuildBaseAt {};
+    class fobBuildDeploySnapshot {};
+    class fobDeployWebAction {};
+    class fobHandleDeployUiEvent {};
     class fobInitClient {};
     class fobInitServer {};
+    class fobOpenDeployDialog {};
     class fobOpenBuildCamera {};
     class fobPostInit { postInit = 1; };
     class fobPreInit { preInit = 1; };
@@ -17,4 +22,5 @@ class FOB {
     class fobSyncRespawn {};
     class fobTypeConfig {};
     class fobUnregister {};
+    class fobUpdateDeployDialog {};
 };

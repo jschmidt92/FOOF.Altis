@@ -34,3 +34,9 @@ FLO_COPLogisticsCategories = [
     "Fortification",
     "Logistics"
 ];
+
+FLO_FOBDeployDialogIdd = 9900;
+FLO_FOBDeployBrowserIdc = 9901;
+FLO_FOBDeployBrowserReady = false;
+FLO_FOBDeployRenderKey = "";
+FLO_FOBDeployWebActionInvoker = compile "params ['_control', '_args']; _control ctrlWebBrowserAction _args;";

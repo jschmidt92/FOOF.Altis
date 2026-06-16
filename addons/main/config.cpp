@@ -31,6 +31,7 @@ class CfgFunctions {
 #include "IDS_Logistics\CfgLogistics.hpp"
 #include "IDS_Logistics\dialogs\BuildMenuDialog.hpp"
 #include "ui\command\CommandVoteDialog.hpp"
+#include "ui\deploy\DeployDialog.hpp"
 #include "ui\store\StoreDialog.hpp"
 
 class CfgRemoteExec {

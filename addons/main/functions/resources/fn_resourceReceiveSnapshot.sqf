@@ -7,3 +7,8 @@ if (!isServer && {remoteExecutedOwner isNotEqualTo 2}) exitWith {
 };
 
 FLO_ResourceSnapshot = _snapshot;
+
+if (!isNull (uiNamespace getVariable ["FLO_DeployControl", controlNull])) then {
+    FLO_FOBDeployRenderKey = "";
+    [] call FLO_fnc_fobUpdateDeployDialog;
+};

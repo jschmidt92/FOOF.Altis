@@ -60,3 +60,8 @@ if (_snapshot get "shouldPromptVote") then {
 };
 
 [] call FLO_fnc_commandUpdateVoteDialog;
+
+if (!isNull (uiNamespace getVariable ["FLO_DeployControl", controlNull])) then {
+    FLO_FOBDeployRenderKey = "";
+    [] call FLO_fnc_fobUpdateDeployDialog;
+};
