@@ -63,11 +63,11 @@ FLO_StoreTicketPacks = [
 ];
 
 FLO_StoreSupportModSources = [
-    ["acre", ["acre_main", "acre_sys_radio"], ["acre_"], ["acre_"], ["acre_"], ["misc", "backpacks"]],
+    ["acre", ["acre_main", "acre_api", "acre_sys_radio"], ["acre_"], ["acre_"], ["acre_"], ["misc", "backpacks"]],
     ["tfar", ["task_force_radio", "tfar_core"], ["tfar_", "tf_"], ["tfar_", "tf_"], ["tfar_", "tf_"], ["misc", "backpacks"]],
     ["ace", ["ace_main"], ["ace_"], ["ace_", "ace3_"], ["ace_", "ace3_"], ["misc", "ammo"]],
-    ["kat", ["kat_main"], ["kat_"], ["kat_"], ["kat_"], ["misc", "ammo"]],
-    ["acm", ["ACM_main", "ACM_core", "ACM_airway", "ACM_breathing", "ACM_cbrn", "ACM_circulation", "ACM_damage", "ACM_disability"], ["acm_"], ["acm_"], ["acm_"], ["misc", "ammo"]]
+    ["kat", ["kat_main", "KAT_main"], ["kat_"], ["kat_"], ["kat_"], ["misc", "ammo"]],
+    ["acm", ["ACM_main", "acm_main", "ACM_core", "acm_core", "ACM_airway", "acm_airway", "ACM_breathing", "acm_breathing", "ACM_cbrn", "acm_cbrn", "ACM_circulation", "acm_circulation", "ACM_damage", "acm_damage", "ACM_disability", "acm_disability"], ["acm_"], ["acm_"], ["acm_"], ["misc", "ammo"]]
 ];
 
 FLO_StoreSupportRejectPatterns = [

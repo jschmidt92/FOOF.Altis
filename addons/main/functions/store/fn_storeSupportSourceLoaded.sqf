@@ -6,20 +6,12 @@ if (_patches isEqualTo []) exitWith {
     true
 };
 
-if ((_patches findIf {
-    isClass (configFile >> "CfgPatches" >> _x)
-}) >= 0) exitWith {
-    true
-};
+private _loaded = false;
 
-private _patchPatterns = [];
-_patchPatterns append _addons;
-_patchPatterns append _prefixes;
-_patchPatterns append _contains;
+{
+    if (isClass (configFile >> "CfgPatches" >> _x)) exitWith {
+        _loaded = true;
+    };
+} forEach _patches;
 
-(("true" configClasses (configFile >> "CfgPatches")) findIf {
-    private _patchName = configName _x;
-
-    ([_patchName, _patchPatterns, "prefix"] call FLO_fnc_storeStringMatchesPatterns)
-        || {[_patchName, _contains, "contains"] call FLO_fnc_storeStringMatchesPatterns}
-}) >= 0
+_loaded

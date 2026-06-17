@@ -4,9 +4,7 @@ _source params ["_sourceName", "_patches", "_addons", "_prefixes", "_contains", 
 
 private _candidates = [
     configName _cfg,
-    configSourceMod _cfg,
-    getText (_cfg >> "author"),
-    getText (_cfg >> "DLC")
+    configSourceMod _cfg
 ];
 
 _candidates append (configSourceAddonList _cfg);
