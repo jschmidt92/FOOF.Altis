@@ -22,6 +22,12 @@ switch (_event) do {
     case "command::voteFaction": {
         [player, _data get "class"] remoteExecCall ["FLO_fnc_commandVoteFaction", 2];
     };
+    case "command::assignRole": {
+        [player, _data get "uid", _data get "role"] remoteExecCall ["FLO_fnc_commandAssignRole", 2];
+    };
+    case "command::clearRole": {
+        [player, _data get "uid", _data get "role"] remoteExecCall ["FLO_fnc_commandClearRole", 2];
+    };
     case "command::refresh": {
         FLO_CommandVoteRenderKey = "";
         [player] remoteExecCall ["FLO_fnc_commandRequestSnapshot", 2];

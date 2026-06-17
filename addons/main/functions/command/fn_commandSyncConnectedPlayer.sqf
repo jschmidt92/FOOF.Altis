@@ -24,4 +24,5 @@ if (isNull _player) exitWith {
     };
 };
 
+[_player] call FLO_fnc_commandApplyPlayerRoles;
 [_player, 0, _owner] call FLO_fnc_commandRequestSnapshot;

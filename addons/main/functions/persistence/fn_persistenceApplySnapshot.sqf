@@ -127,6 +127,12 @@ if ("command" in _snapshot) then {
                     ["logistics", []],
                     ["store", []]
                 ];
+                private _roleAssignments = createHashMapFromArray [
+                    ["deputy", []],
+                    ["medic", []],
+                    ["doctor", []],
+                    ["engineer", []]
+                ];
 
                 if ("permissionGrants" in _record) then {
                     {
@@ -134,7 +140,15 @@ if ("command" in _snapshot) then {
                     } forEach (_record get "permissionGrants");
                 };
 
+                if ("roleAssignments" in _record) then {
+                    {
+                        _roleAssignments set [_x select 0, +(_x select 1)];
+                    } forEach (_record get "roleAssignments");
+                };
+
                 _state set ["permissionGrants", _permissionGrants];
+                _state set ["roleAssignments", _roleAssignments];
+                [_sideKey] call FLO_fnc_commandSyncRoleGrants;
             };
         } forEach (_command get "sides");
     };

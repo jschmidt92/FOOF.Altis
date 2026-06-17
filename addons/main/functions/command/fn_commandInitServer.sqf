@@ -34,6 +34,12 @@ FLO_CommandFactionOptions = createHashMapFromArray [
                 ["garage", []],
                 ["logistics", []],
                 ["store", []]
+            ]],
+            ["roleAssignments", createHashMapFromArray [
+                ["deputy", []],
+                ["medic", []],
+                ["doctor", []],
+                ["engineer", []]
             ]]
         ]
     ];
@@ -63,12 +69,12 @@ FLO_CommandPlayerDisconnectedEh = addMissionEventHandler [
         {
             private _sideKey = _x;
             private _state = FLO_CommandSideState get _sideKey;
+            private _side = [west, east] select (_sideKey isEqualTo "EAST");
 
             if ((_state get "commanderUid") isEqualTo _uid) then {
                 _state set ["commanderUid", ""];
                 _state set ["commanderName", ""];
 
-                private _side = [west, east] select (_sideKey isEqualTo "EAST");
                 [_sideKey, "commander", "commanderDisconnected", FLO_CommandReplacementVoteDuration] call FLO_fnc_commandStartVoteWindow;
                 [_side] call FLO_fnc_commandScheduleBroadcastSide;
                 ["commanderDisconnected"] call FLO_fnc_persistenceScheduleSave;
@@ -79,7 +85,26 @@ FLO_CommandPlayerDisconnectedEh = addMissionEventHandler [
                     _name
                 ];
             };
+
+            private _changedSides = [_uid, _sideKey] call FLO_fnc_commandClearUidRoles;
+
+            if (_changedSides isNotEqualTo []) then {
+                FLO_CommandRevision = FLO_CommandRevision + 1;
+                [_side] call FLO_fnc_commandScheduleBroadcastSide;
+                ["commandRoleDisconnect"] call FLO_fnc_persistenceScheduleSave;
+            };
         } forEach ["WEST", "EAST"];
+    }
+];
+
+FLO_CommandEntityRespawnedEh = addMissionEventHandler [
+    "EntityRespawned",
+    {
+        params ["_newEntity", "_oldEntity"];
+
+        if (isPlayer _newEntity) then {
+            [_newEntity] call FLO_fnc_commandApplyPlayerRoles;
+        };
     }
 ];
 

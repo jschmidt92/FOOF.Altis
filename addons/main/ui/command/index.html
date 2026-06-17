@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>FOOF Command Vote</title>
+    <title>FOOF Command</title>
     <style>
         html {
             color-scheme: dark;
@@ -224,6 +224,14 @@
             overflow: hidden;
         }
 
+        .right-stack {
+            display: grid;
+            grid-template-rows: minmax(220px, 0.78fr) minmax(320px, 1.22fr);
+            gap: 14px;
+            min-height: 0;
+            overflow: hidden;
+        }
+
         .panel {
             min-height: 0;
             background:
@@ -359,6 +367,82 @@
         .faction-list {
             grid-template-columns: 1fr;
             grid-auto-rows: 154px;
+        }
+
+        .role-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-auto-rows: minmax(136px, auto);
+            gap: 10px;
+            align-content: start;
+            min-height: 0;
+            overflow: auto;
+            padding: 2px 6px 4px 0;
+        }
+
+        .role-card {
+            display: grid;
+            grid-template-rows: auto auto;
+            gap: 10px;
+            min-height: 136px;
+            padding: 13px;
+            background:
+                linear-gradient(155deg, rgba(103, 232, 255, 0.08), rgba(103, 232, 255, 0) 38%),
+                rgba(20, 34, 48, 0.82);
+            box-shadow: inset 0 0 0 1px rgba(103, 232, 255, 0.12), 0 16px 30px rgba(0, 0, 0, 0.24);
+            clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+        }
+
+        .role-top {
+            min-width: 0;
+        }
+
+        .role-name {
+            overflow: hidden;
+            color: #F2F7FA;
+            font-size: 20px;
+            font-weight: 900;
+            text-overflow: ellipsis;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .role-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+        }
+
+        .role-btn {
+            min-height: 34px;
+            padding: 0 9px;
+            overflow: hidden;
+            color: #A7B7C8;
+            background: rgba(3, 8, 14, 0.36);
+            box-shadow: inset 0 0 0 1px rgba(103, 232, 255, 0.18);
+            font-size: 13px;
+            font-weight: 900;
+            text-overflow: ellipsis;
+            text-transform: uppercase;
+            white-space: nowrap;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+
+        .role-btn:hover {
+            color: #25D7FF;
+            box-shadow: inset 0 0 0 1px rgba(37, 215, 255, 0.48), 0 0 18px rgba(37, 215, 255, 0.12);
+        }
+
+        .role-btn.active {
+            color: #A7FF5A;
+            background: rgba(167, 255, 90, 0.08);
+            box-shadow: inset 0 0 0 1px rgba(167, 255, 90, 0.36);
+        }
+
+        .role-btn:disabled {
+            color: #66788A;
+            opacity: 0.72;
+            box-shadow: inset 0 0 0 1px rgba(103, 232, 255, 0.08);
         }
 
         .vote-card {
@@ -601,7 +685,7 @@
                 grid-template-columns: 290px minmax(0, 1fr);
             }
 
-            .layout .vote-panel:last-child {
+            .right-stack {
                 grid-column: 1 / -1;
             }
         }
@@ -612,7 +696,7 @@
         <header class="topbar">
             <section class="brand">
                 <div class="overline" id="sideName">Waiting for side assignment</div>
-                <h1>Command Vote</h1>
+                <h1>Command</h1>
             </section>
 
             <section class="status-strip">
@@ -679,15 +763,28 @@
                 <div class="vote-list" id="candidateList"></div>
             </section>
 
-            <section class="panel vote-panel">
-                <div class="panel-head">
-                    <div class="panel-title">
-                        <div class="overline">Force Package</div>
-                        <h2>Faction</h2>
-                        <p>Select the faction catalog your side will field.</p>
+            <section class="right-stack">
+                <section class="panel vote-panel">
+                    <div class="panel-head">
+                        <div class="panel-title">
+                            <div class="overline">Force Package</div>
+                            <h2>Faction</h2>
+                            <p>Select the faction catalog your side will field.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="vote-list faction-list" id="factionList"></div>
+                    <div class="vote-list faction-list" id="factionList"></div>
+                </section>
+
+                <section class="panel vote-panel">
+                    <div class="panel-head">
+                        <div class="panel-title">
+                            <div class="overline">Command Roles</div>
+                            <h2>Permissions</h2>
+                            <p id="roleSummary">Commander assigns deputy, medical, and engineer slots.</p>
+                        </div>
+                    </div>
+                    <div class="role-list" id="roleList"></div>
+                </section>
             </section>
         </section>
 
@@ -830,7 +927,17 @@
                     return;
                 }
 
-                message("Command vote locked.", "good", false);
+                if (snapshot.playerIsCommander) {
+                    message("Command roles available. Ctrl+Shift+C reopens this panel.", "good", false);
+                    return;
+                }
+
+                if (snapshot.playerIsDeputy) {
+                    message("Deputy command authority active.", "good", false);
+                    return;
+                }
+
+                message("Command state locked.", "good", false);
             }
 
             function progressPercent(votes, requiredVotes) {
@@ -846,6 +953,59 @@
                 span.className = "tag" + (tone ? " " + tone : "");
                 span.textContent = text;
                 return span;
+            }
+
+            function roleLabel(role) {
+                if (role === "deputy") {
+                    return "Deputy";
+                }
+
+                if (role === "medic") {
+                    return "Medic";
+                }
+
+                if (role === "doctor") {
+                    return "Doctor";
+                }
+
+                if (role === "engineer") {
+                    return "Engineer";
+                }
+
+                return role;
+            }
+
+            function roleTone(role) {
+                if (role === "doctor" || role === "medic") {
+                    return "green";
+                }
+
+                if (role === "deputy") {
+                    return "blue";
+                }
+
+                if (role === "engineer") {
+                    return "amber";
+                }
+
+                return "";
+            }
+
+            function hasRole(candidate, role) {
+                return (candidate.roles || []).indexOf(role) !== -1;
+            }
+
+            function roleSlot(snapshot, role) {
+                var slots = snapshot.roleSlots || [];
+                var i;
+
+                for (i = 0; i < slots.length; i += 1) {
+                    if (slots[i].role === role) {
+                        return slots[i];
+                    }
+                }
+
+                return { role: role, label: roleLabel(role), assigned: 0, cap: 0 };
             }
 
             function progress(votes, requiredVotes, complete) {
@@ -920,14 +1080,16 @@
 
                 setBriefClass("commanderBrief", snapshot.commanderVoteOpen, !snapshot.commanderVoteOpen && !!snapshot.commanderName, snapshot.commanderVoteReason === "commanderDisconnected");
                 setBriefClass("factionBrief", snapshot.factionVoteOpen, !snapshot.factionVoteOpen && !!snapshot.factionName, false);
-                setBriefClass("authorityBrief", false, !!snapshot.playerIsCommander, false);
+                setBriefClass("authorityBrief", false, !!snapshot.playerIsCommander || !!snapshot.playerIsDeputy, false);
 
-                setText("authorityValue", snapshot.playerIsCommander ? "Commander" : "Voting");
+                setText("authorityValue", snapshot.playerIsCommander ? "Commander" : (snapshot.playerIsDeputy ? "Deputy" : "Voting"));
                 setText(
                     "authorityDetail",
                     snapshot.playerIsCommander
-                        ? "You have command authority for initial FOB deployment."
-                        : "Vote with your side. Commander gains initial FOB authority."
+                        ? "You can assign side roles and command permissions."
+                        : (snapshot.playerIsDeputy
+                            ? "You have delegated build, FOB, and logistics authority."
+                            : "Vote with your side. Commander assigns side roles.")
                 );
             }
 
@@ -997,6 +1159,7 @@
                 var selected = snapshot.playerCommanderVote === candidate.uid;
                 var elected = snapshot.commanderUid === candidate.uid;
                 var tags = [];
+                var roles = candidate.roles || [];
 
                 if (candidate.isSelf) {
                     tags.push({ text: "You", tone: "blue" });
@@ -1009,6 +1172,10 @@
                 } else {
                     tags.push({ text: snapshot.commanderVoteOpen ? "Eligible" : "Closed", tone: snapshot.commanderVoteOpen ? "" : "amber" });
                 }
+
+                roles.forEach(function (role) {
+                    tags.push({ text: roleLabel(role), tone: roleTone(role) });
+                });
 
                 return buildVoteCard({
                     name: candidate.name + (candidate.isSelf ? " (You)" : ""),
@@ -1101,10 +1268,103 @@
                 }
             }
 
+            function roleButton(candidate, snapshot, role) {
+                var button = document.createElement("button");
+                var slot = roleSlot(snapshot, role);
+                var active = hasRole(candidate, role);
+                var full = slot.assigned >= slot.cap;
+                var commanderTarget = candidate.uid === snapshot.commanderUid;
+                var disabled = !snapshot.playerIsCommander ||
+                    snapshot.commanderVoteOpen ||
+                    snapshot.factionVoteOpen ||
+                    (role === "deputy" && commanderTarget) ||
+                    (!active && full);
+
+                button.type = "button";
+                button.className = "role-btn" + (active ? " active" : "");
+                button.disabled = disabled;
+                button.textContent = active
+                    ? roleLabel(role) + " ON"
+                    : roleLabel(role) + " " + slot.assigned + "/" + slot.cap;
+                button.onclick = function () {
+                    if (active) {
+                        send("command::clearRole", { uid: candidate.uid, role: role });
+                        message("Clearing " + roleLabel(role) + " role.", "", true);
+                    } else {
+                        send("command::assignRole", { uid: candidate.uid, role: role });
+                        message("Assigning " + roleLabel(role) + " role.", "", true);
+                    }
+                };
+
+                return button;
+            }
+
+            function roleCard(candidate, snapshot) {
+                var card = document.createElement("article");
+                var top = document.createElement("div");
+                var name = document.createElement("div");
+                var tags = document.createElement("div");
+                var actions = document.createElement("div");
+                var roles = candidate.roles || [];
+
+                card.className = "role-card";
+                top.className = "role-top";
+                name.className = "role-name";
+                name.textContent = candidate.name + (candidate.isSelf ? " (You)" : "");
+
+                tags.className = "tag-row";
+
+                if (candidate.isCommander) {
+                    tags.appendChild(tag("Commander", "green"));
+                }
+
+                if (roles.length === 0 && !candidate.isCommander) {
+                    tags.appendChild(tag("Unassigned", ""));
+                }
+
+                roles.forEach(function (role) {
+                    tags.appendChild(tag(roleLabel(role), roleTone(role)));
+                });
+
+                actions.className = "role-actions";
+                ["deputy", "medic", "doctor", "engineer"].forEach(function (role) {
+                    actions.appendChild(roleButton(candidate, snapshot, role));
+                });
+
+                top.appendChild(name);
+                top.appendChild(tags);
+                card.appendChild(top);
+                card.appendChild(actions);
+                return card;
+            }
+
+            function renderRoles(container, candidateData, snapshot) {
+                var slots = snapshot.roleSlots || [];
+                var summary = [];
+
+                clear(container);
+
+                slots.forEach(function (slot) {
+                    summary.push(roleLabel(slot.role) + " " + slot.assigned + "/" + slot.cap);
+                });
+
+                setText("roleSummary", summary.join("  |  ") || "Commander assigns deputy, medical, and engineer slots.");
+
+                if (candidateData.length === 0) {
+                    container.appendChild(empty("No active players on this side."));
+                    return;
+                }
+
+                candidateData.forEach(function (candidate) {
+                    container.appendChild(roleCard(candidate, snapshot));
+                });
+            }
+
             window.FOOFCommand = {
                 applySnapshot: function (snapshot) {
                     var candidates = node("candidateList");
                     var factions = node("factionList");
+                    var roles = node("roleList");
                     var candidateData = snapshot.candidates || [];
                     var factionData = snapshot.factions || [];
                     var previousPromptId = activeSnapshot ? activeSnapshot.votePromptId : "";
@@ -1128,8 +1388,8 @@
 
                     activeSnapshot = snapshot;
 
-                    setText("sideName", snapshot.sideName + " command setup");
-                    setText("authorityStatus", snapshot.playerIsCommander ? "You are the commander" : "No command authority");
+                    setText("sideName", snapshot.sideName + " command");
+                    setText("authorityStatus", snapshot.playerIsCommander ? "You are the commander" : (snapshot.playerIsDeputy ? "Deputy command authority" : "No command authority"));
 
                     clear(candidates);
                     updateStatuses(snapshot);
@@ -1144,6 +1404,7 @@
                     }
 
                     renderFactions(factions, factionData, snapshot);
+                    renderRoles(roles, candidateData, snapshot);
 
                     ensureCountdown();
                 },

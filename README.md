@@ -17,7 +17,9 @@ FOOF currently requires CBA_A3.
 - Server-authoritative objective state.
 - Generated land-only square control grid.
 - Player-facing map visualizer for sectors, ownership, contesting, and capture pressure.
-- Area objectives generated from capitals, cities, villages, local places, airfields, and strategic locations.
+- Area objectives generated from map labels including capitals, cities, villages, local places, airfields, strategic locations, and coastal/marine labels when they resolve to playable land.
+- AO generation uses map label footprint sizes and overlap-aware grid claims so nearby places like towns, terminals, ports, and villages can coexist instead of being deleted by a flat spacing rule.
+- Capped built-up-area enrichment is enabled to promote dense unlabeled compounds into low-value AOs without requiring player-edited objective files; the first-pass profile is deliberately conservative and logs startup timing/scan diagnostics.
 - Quiet AO map layer with ownership halos and level-only objective labels so Arma's native town labels stay readable.
 - Frontline-only sector capture: enemy sectors must be adjacent to friendly control before they can flip.
 - Randomized fair deployment zones choose opposing BLUFOR/OPFOR starts from valid generated grid cells each match.
@@ -35,7 +37,9 @@ FOOF currently requires CBA_A3.
 - A compact in-world AO panel opens with `Ctrl+Shift+O` while standing inside an AO and shows owner, level, income per 15 minutes, upgrade cost, and upgrade availability.
 - Server-authoritative commander and faction voting for BLUFOR and OPFOR with timed startup and replacement commander vote windows.
 - Startup commander/faction votes resolve to a deterministic fallback on expiry so a side cannot leave opening votes without command or faction setup.
-- Simple HTML command vote dialog using Arma's web browser control.
+- HTML command panel using Arma's web browser control for commander/faction voting and commander-managed side roles.
+- Command panel can be reopened with `Ctrl+Shift+C`; elected commanders can assign one deputy commander plus scaling medic, doctor, and engineer slots.
+- Command roles are server-owned, persisted, and reapplied on reconnect/respawn; ACE medical and repair role variables are applied as effects for assigned medics, doctors, and engineers.
 - Command voting opens after players enter the mission view, not during the post-lobby Continue screen.
 - Dedicated clients retry command snapshot requests until their real BLUFOR/OPFOR side snapshot arrives, and the server resyncs command state after player connect so initial votes open reliably for both sides.
 - First FOB per BLUFOR/OPFOR side is placed by the elected side commander; later FOBs spend faction currency.
@@ -94,4 +98,4 @@ HEMTT project config is included for local addon checks and launch workflow.
 
 ## Known Issues
 
-FOOF is not gameplay-complete yet. Respawn waves, victory rules, commander-granted roles, external persistence backends, and full match flow are still foundation work.
+FOOF is not gameplay-complete yet. Respawn waves, victory rules, external persistence backends, and full match flow are still foundation work.

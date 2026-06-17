@@ -119,6 +119,16 @@ class CfgRemoteExec {
             jip = 0;
         };
 
+        class FLO_fnc_commandAssignRole {
+            allowedTargets = 2;
+            jip = 0;
+        };
+
+        class FLO_fnc_commandClearRole {
+            allowedTargets = 2;
+            jip = 0;
+        };
+
         class FLO_fnc_fobRequestDeploy {
             allowedTargets = 2;
             jip = 0;

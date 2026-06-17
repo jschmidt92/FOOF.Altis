@@ -55,10 +55,15 @@ private _commandSides = [];
     private _sideKey = _x;
     private _state = FLO_CommandSideState get _sideKey;
     private _grants = [];
+    private _roles = [];
 
     {
         _grants pushBack [_x, +_y];
     } forEach (_state get "permissionGrants");
+
+    {
+        _roles pushBack [_x, +_y];
+    } forEach (_state get "roleAssignments");
 
     _commandSides pushBack [
         ["sideKey", _sideKey],
@@ -67,7 +72,8 @@ private _commandSides = [];
         ["commanderName", _state get "commanderName"],
         ["factionClass", _state get "factionClass"],
         ["factionName", _state get "factionName"],
-        ["permissionGrants", _grants]
+        ["permissionGrants", _grants],
+        ["roleAssignments", _roles]
     ];
 } forEach ["WEST", "EAST"];
 

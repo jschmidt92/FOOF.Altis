@@ -38,6 +38,18 @@ if ((_savedSideKey isEqualTo "") || {_savedSideKey isNotEqualTo _currentSideKey}
         !(((_x get "playerUid") isEqualTo _uid) && {(_savedSideKey isEqualTo "") || {(_x get "sideKey") isEqualTo _savedSideKey}})
     };
 
+    private _changedRoleSides = [_uid] call FLO_fnc_commandClearUidRoles;
+
+    if (_changedRoleSides isNotEqualTo []) then {
+        FLO_CommandRevision = FLO_CommandRevision + 1;
+
+        {
+            [[west, east] select (_x isEqualTo "EAST")] call FLO_fnc_commandScheduleBroadcastSide;
+        } forEach _changedRoleSides;
+    };
+
+    [_unit] call FLO_fnc_commandApplyPlayerRoles;
+
     _unit setVariable ["FLO_Spawn_Assigned", false, true];
     _unit setVariable ["FLO_Spawn_AssignedCellId", "", true];
     _unit setVariable ["FLO_Persistence_Loaded", false, true];

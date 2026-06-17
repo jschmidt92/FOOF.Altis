@@ -85,6 +85,11 @@ _state set ["commanderVoteOpen", false];
 _state set ["commanderVoteReason", ""];
 _state set ["commanderVoteEndsAt", 0];
 _state set ["commanderVotePromptId", ""];
+[_sideKey] call FLO_fnc_commandPruneRoleAssignments;
+
+{
+    [_x] call FLO_fnc_commandApplyPlayerRoles;
+} forEach _players;
 
 FLO_CommandRevision = FLO_CommandRevision + 1;
 ["commanderResolved"] call FLO_fnc_persistenceScheduleSave;

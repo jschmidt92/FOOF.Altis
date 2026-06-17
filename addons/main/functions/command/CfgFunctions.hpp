@@ -8,6 +8,10 @@ class Command {
     class commandCanOpenVoteDialog {};
     class commandClientInit {};
     class commandClientNeedsSnapshot {};
+    class commandApplyPlayerRoles {};
+    class commandAssignRole {};
+    class commandClearRole {};
+    class commandClearUidRoles {};
     class commandEnsureInitialVoteWindow {};
     class commandExpireVoteWindow {};
     class commandHandleVoteUiEvent {};
@@ -16,14 +20,17 @@ class Command {
     class commandPlayerHasAuthority {};
     class commandPostInit { postInit = 1; };
     class commandPreInit { preInit = 1; };
+    class commandPruneRoleAssignments {};
     class commandReceiveSnapshot {};
     class commandRequestSnapshot {};
     class commandResolveCommanderVote {};
     class commandResolveFactionVote {};
+    class commandRoleCaps {};
     class commandScheduleBroadcastSide {};
     class commandSendSnapshot {};
     class commandSidePlayers {};
     class commandStartVoteWindow {};
+    class commandSyncRoleGrants {};
     class commandSyncConnectedPlayer {};
     class commandUpdateVoteDialog {};
     class commandVoteCommander {};
