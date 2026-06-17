@@ -2,19 +2,36 @@ params ["_unit", "_killer", "_instigator", "_useEffects"];
 
 if (!isServer) exitWith {};
 if (isNull _unit) exitWith {};
-if (!isPlayer _unit) exitWith {};
-
-private _side = side group _unit;
-
-if !(_side in [west, east]) exitWith {};
 
 private _uid = getPlayerUID _unit;
 
+if (_uid isEqualTo "") then {
+    _uid = _unit getVariable ["FLO_TicketPlayerUid", ""];
+};
+
 if (_uid isEqualTo "") exitWith {};
+
+private _sideKey = _unit getVariable ["FLO_TicketSideKey", ""];
+private _side = sideUnknown;
+
+if (_sideKey isEqualTo "") then {
+    _side = side group _unit;
+
+    if (_side in [west, east]) then {
+        _sideKey = [_side] call FLO_fnc_resourceSideKey;
+    };
+} else {
+    _side = switch (_sideKey) do {
+        case "WEST": { west };
+        case "EAST": { east };
+        default { sideUnknown };
+    };
+};
+
+if !(_side in [west, east]) exitWith {};
 if (_unit getVariable ["FLO_TicketDeathHandled", false]) exitWith {};
 _unit setVariable ["FLO_TicketDeathHandled", true];
 
-private _sideKey = [_side] call FLO_fnc_resourceSideKey;
 private _state = "charged";
 private _locked = false;
 private _message = "";

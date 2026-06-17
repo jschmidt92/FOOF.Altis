@@ -18,6 +18,29 @@ FLO_TicketConsumedTotal = createHashMapFromArray [
 FLO_TicketDeathStates = createHashMap;
 FLO_TicketRevision = 0;
 
+{
+    [_x] call FLO_fnc_ticketTrackPlayer;
+} forEach allPlayers;
+
+FLO_TicketPlayerConnectedEh = addMissionEventHandler [
+    "PlayerConnected",
+    {
+        params ["_id", "_uid", "_name", "_jip", "_owner"];
+
+        [
+            {
+                {
+                    if ((getPlayerUID _x) isEqualTo _this) exitWith {
+                        [_x] call FLO_fnc_ticketTrackPlayer;
+                    };
+                } forEach allPlayers;
+            },
+            _uid,
+            3
+        ] call CBA_fnc_waitAndExecute;
+    }
+];
+
 FLO_TicketEntityKilledEh = addMissionEventHandler [
     "EntityKilled",
     {
@@ -30,6 +53,7 @@ FLO_TicketEntityRespawnedEh = addMissionEventHandler [
     "EntityRespawned",
     {
         params ["_newEntity", "_oldEntity"];
+        [_newEntity] call FLO_fnc_ticketTrackPlayer;
         [_newEntity, _oldEntity] call FLO_fnc_ticketHandleRespawn;
     }
 ];

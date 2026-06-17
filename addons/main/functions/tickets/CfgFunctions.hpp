@@ -12,4 +12,5 @@ class Tickets {
     class ticketPreInit { preInit = 1; };
     class ticketSideBalance {};
     class ticketSyncPlayer {};
+    class ticketTrackPlayer {};
 };
