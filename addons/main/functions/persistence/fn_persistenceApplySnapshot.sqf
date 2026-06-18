@@ -254,6 +254,34 @@ if ("objectives" in _snapshot) then {
                         _objective set ["capturedRestoreExpiresAt", diag_tickTime + (_capturedRestoreRemaining max 0)];
                     };
 
+                    if ("pressureWest" in _record) then {
+                        _objective set ["pressureWest", ((_record get "pressureWest") max 0) min FLO_ObjectivePressureThreshold];
+                    };
+
+                    if ("pressureEast" in _record) then {
+                        _objective set ["pressureEast", ((_record get "pressureEast") max 0) min FLO_ObjectivePressureThreshold];
+                    };
+
+                    if ("pressureWestLastAgo" in _record) then {
+                        _objective set ["pressureWestLastAt", diag_tickTime - ((_record get "pressureWestLastAgo") max 0)];
+                    };
+
+                    if ("pressureEastLastAgo" in _record) then {
+                        _objective set ["pressureEastLastAt", diag_tickTime - ((_record get "pressureEastLastAgo") max 0)];
+                    };
+
+                    if ("vulnerableSide" in _record) then {
+                        private _vulnerableSide = [_record get "vulnerableSide"] call FLO_fnc_persistenceSideFromKey;
+                        private _vulnerableRemaining = 0;
+
+                        if ("vulnerableRemaining" in _record) then {
+                            _vulnerableRemaining = _record get "vulnerableRemaining";
+                        };
+
+                        _objective set ["vulnerableSide", _vulnerableSide];
+                        _objective set ["vulnerableExpiresAt", diag_tickTime + (_vulnerableRemaining max 0)];
+                    };
+
                     if ("pendingUpgradeLevel" in _record) then {
                         private _pendingUpgradeLevel = ((_record get "pendingUpgradeLevel") min FLO_ObjectiveMaxLevel) max 0;
                         private _pendingUpgradeRemaining = 0;
@@ -336,10 +364,6 @@ if ("idsLogistics" in _snapshot) then {
             _entity setVariable ["IDS_Logistics_Category", _record get "category", true];
             _entity setVariable ["IDS_Logistics_SideKey", _record get "sideKey", true];
             _entity setVariable ["IDS_Logistics_isPlacedEntity", true, true];
-            _entity addEventHandler ["Killed", {
-                params ["_unit", "_killer", "_instigator", "_useEffects"];
-                [_unit, _killer, _instigator, _useEffects] call IDS_Logistics_fnc_onEntityKilled;
-            }];
 
             IDS_Logistics_PlacedEntities pushBack _entity;
         };

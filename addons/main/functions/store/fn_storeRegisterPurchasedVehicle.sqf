@@ -37,18 +37,4 @@ FLO_StorePurchasedVehicles set [
     ]
 ];
 
-_vehicle addEventHandler [
-    "Killed",
-    {
-        params ["_vehicle"];
-
-        private _assetId = _vehicle getVariable ["FLO_Store_AssetId", ""];
-
-        if (_assetId isNotEqualTo "") then {
-            FLO_StorePurchasedVehicles deleteAt _assetId;
-            ["storePurchasedVehicleKilled"] call FLO_fnc_persistenceScheduleSave;
-        };
-    }
-];
-
 _assetId

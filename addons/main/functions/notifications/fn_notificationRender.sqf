@@ -12,13 +12,13 @@ if (isNull _display) exitWith {
     ] call CBA_fnc_waitAndExecute;
 };
 
-private _w = 0.34 * safeZoneW;
-private _h = 0.086 * safeZoneH;
+private _w = 0.285 * safeZoneW;
+private _h = 0.074 * safeZoneH;
 private _gap = 0.010 * safeZoneH;
-private _x = safeZoneX + safeZoneW - _w - (0.018 * safeZoneW);
-private _y0 = safeZoneY + (0.130 * safeZoneH);
+private _x = safeZoneX + safeZoneW - _w - (0.010 * safeZoneW);
+private _y0 = safeZoneY + (0.145 * safeZoneH);
 private _accentW = 0.0045 * safeZoneW;
-private _padX = 0.012 * safeZoneW;
+private _padX = 0.010 * safeZoneW;
 private _titleH = 0.024 * safeZoneH;
 
 for "_i" from 0 to ((count FLO_NotificationActive) - 1) do {
@@ -74,9 +74,9 @@ for "_i" from 0 to ((count FLO_NotificationActive) - 1) do {
 
     _body ctrlSetPosition [
         _accentW + _padX,
-        0.035 * safeZoneH,
+        0.032 * safeZoneH,
         _w - _accentW - (_padX * 2),
-        _h - (0.040 * safeZoneH)
+        _h - (0.036 * safeZoneH)
     ];
     _body ctrlSetStructuredText (parseText format [
         "<t color='#F2F7FA' size='0.90'>%1</t><br/><t color='%2' size='0.60'>%3</t>",

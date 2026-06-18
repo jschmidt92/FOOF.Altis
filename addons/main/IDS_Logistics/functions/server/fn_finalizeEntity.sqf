@@ -107,11 +107,6 @@ if (_originalNetId isNotEqualTo "") then {
     _entity setVariable ["IDS_Logistics_SideKey", _sideKey, true];
     _entity setVariable ["IDS_Logistics_isPlacedEntity", true, true];
 
-    _entity addEventHandler ["Killed", {
-        params ["_unit", "_killer", "_instigator", "_useEffects"];
-        [_unit, _killer, _instigator, _useEffects] call IDS_Logistics_fnc_onEntityKilled;
-    }];
-
     IDS_Logistics_PlacedEntities pushBack _entity;
     ["idsPlace"] call FLO_fnc_persistenceScheduleSave;
 

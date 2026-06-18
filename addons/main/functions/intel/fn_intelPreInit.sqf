@@ -19,6 +19,7 @@ FLO_IntelActiveBodyNetId = "";
 FLO_IntelBrowserReady = false;
 FLO_IntelLastPayload = createHashMap;
 FLO_IntelMarkers = [];
+FLO_IntelEntityKilledEh = -1;
 
 FLO_IntelBodies = createHashMap;
 FLO_IntelBaseFinds = createHashMapFromArray [

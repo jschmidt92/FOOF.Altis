@@ -177,6 +177,14 @@
                 <div class="label">Upgrade Status</div>
                 <div class="value" id="status">Ready</div>
             </div>
+            <div class="stat">
+                <div class="label">Pressure</div>
+                <div class="value amber" id="pressure">Rear</div>
+            </div>
+            <div class="stat">
+                <div class="label">Vulnerability</div>
+                <div class="value" id="vulnerable">Stable</div>
+            </div>
         </div>
 
         <div class="actions">
@@ -254,6 +262,8 @@
                     text("level", String(payload.level || 0) + " " + (payload.levelName || ""));
                     text("income", money(payload.incomePer15) + " / 15 min");
                     text("cost", payload.level >= payload.maxLevel ? "Max" : money(payload.upgradeCost));
+                    text("pressure", (payload.pressureState || "Rear") + " - " + String(payload.attackerPressure || 0) + " / " + String(payload.pressureThreshold || 100));
+                    text("vulnerable", payload.vulnerableRemaining > 0 ? ((payload.vulnerableSide || "Enemy") + " " + duration(payload.vulnerableRemaining)) : "Stable");
                     updateStatus();
                     text("hint", payload.canUpgrade ? ("Faction balance: " + money(payload.balance)) : (payload.upgradeReason || "Upgrade unavailable."));
 

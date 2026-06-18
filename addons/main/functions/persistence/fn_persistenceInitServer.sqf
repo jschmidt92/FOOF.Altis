@@ -8,8 +8,8 @@ if (_snapshot isNotEqualTo []) then {
     diag_log format ["[FLO][Persistence] No saved snapshot found key=%1", FLO_PersistenceKey];
 };
 
-FLO_PersistenceHandleDisconnectEh = addMissionEventHandler [
-    "HandleDisconnect",
+FLO_PersistenceHandleDisconnectEh = [
+    "FLO_eventHandleDisconnect",
     {
         params ["_unit", "_id", "_uid", "_name"];
 
@@ -17,13 +17,11 @@ FLO_PersistenceHandleDisconnectEh = addMissionEventHandler [
             [_unit, false] call FLO_fnc_persistenceSavePlayer;
             ["disconnect"] call FLO_fnc_persistenceScheduleSave;
         };
-
-        false
     }
-];
+] call CBA_fnc_addEventHandler;
 
-FLO_PersistencePlayerConnectedEh = addMissionEventHandler [
-    "PlayerConnected",
+FLO_PersistencePlayerConnectedEh = [
+    "FLO_eventPlayerConnected",
     {
         params ["_id", "_uid", "_name", "_jip", "_owner"];
 
@@ -36,7 +34,7 @@ FLO_PersistencePlayerConnectedEh = addMissionEventHandler [
             4
         ] call CBA_fnc_waitAndExecute;
     }
-];
+] call CBA_fnc_addEventHandler;
 
 [] call FLO_fnc_persistenceStartLoop;
 

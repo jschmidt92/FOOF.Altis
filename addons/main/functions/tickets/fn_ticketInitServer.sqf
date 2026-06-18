@@ -16,14 +16,15 @@ FLO_TicketConsumedTotal = createHashMapFromArray [
 ];
 
 FLO_TicketDeathStates = createHashMap;
+FLO_TicketPlayerSides = createHashMap;
 FLO_TicketRevision = 0;
 
 {
     [_x] call FLO_fnc_ticketTrackPlayer;
 } forEach allPlayers;
 
-FLO_TicketPlayerConnectedEh = addMissionEventHandler [
-    "PlayerConnected",
+FLO_TicketPlayerConnectedEh = [
+    "FLO_eventPlayerConnected",
     {
         params ["_id", "_uid", "_name", "_jip", "_owner"];
 
@@ -39,24 +40,24 @@ FLO_TicketPlayerConnectedEh = addMissionEventHandler [
             3
         ] call CBA_fnc_waitAndExecute;
     }
-];
+] call CBA_fnc_addEventHandler;
 
-FLO_TicketEntityKilledEh = addMissionEventHandler [
-    "EntityKilled",
+FLO_TicketEntityKilledEh = [
+    "FLO_eventEntityKilled",
     {
         params ["_unit", "_killer", "_instigator", "_useEffects"];
         [_unit, _killer, _instigator, _useEffects] call FLO_fnc_ticketHandleDeath;
     }
-];
+] call CBA_fnc_addEventHandler;
 
-FLO_TicketEntityRespawnedEh = addMissionEventHandler [
-    "EntityRespawned",
+FLO_TicketEntityRespawnedEh = [
+    "FLO_eventEntityRespawned",
     {
         params ["_newEntity", "_oldEntity"];
         [_newEntity] call FLO_fnc_ticketTrackPlayer;
         [_newEntity, _oldEntity] call FLO_fnc_ticketHandleRespawn;
     }
-];
+] call CBA_fnc_addEventHandler;
 
 diag_log format [
     "[FLO][Tickets] Ticket system initialized initialBalance=%1 respawnCost=%2",

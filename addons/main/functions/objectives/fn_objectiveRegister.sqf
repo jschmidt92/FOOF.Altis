@@ -41,11 +41,28 @@ FLO_Objectives set [
         ["capturedRestoreOwner", sideUnknown],
         ["capturedRestoreLevel", 0],
         ["capturedRestoreExpiresAt", 0],
+        ["frontline", false],
+        ["pressureWest", 0],
+        ["pressureEast", 0],
+        ["pressureWestLastAt", 0],
+        ["pressureEastLastAt", 0],
+        ["pressureWestReportState", "none"],
+        ["pressureEastReportState", "none"],
+        ["vulnerableSide", sideUnknown],
+        ["vulnerableExpiresAt", 0],
         ["pendingUpgradeLevel", 0],
         ["pendingUpgradeStartedAt", 0],
         ["pendingUpgradeCompleteAt", 0]
     ]
 ];
+
+{
+    private _cell = FLO_ObjectiveCells get _x;
+    private _role = ["support", "anchor"] select (_x isEqualTo _anchorCellId);
+
+    _cell set ["objectiveId", _id];
+    _cell set ["role", _role];
+} forEach _cellIds;
 
 diag_log format [
     "[FLO][Objective] Registered objective %1 (%2) with %3 cells",

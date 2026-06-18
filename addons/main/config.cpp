@@ -15,6 +15,7 @@ class CfgFunctions {
     class FLO {
         tag = "FLO";
 
+        #include "functions\events\CfgFunctions.hpp"
         #include "functions\notifications\CfgFunctions.hpp"
         #include "functions\intel\CfgFunctions.hpp"
         #include "functions\tickets\CfgFunctions.hpp"

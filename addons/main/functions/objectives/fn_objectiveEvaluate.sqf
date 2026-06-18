@@ -15,6 +15,8 @@ private _eastOwnedCells = 0;
 private _westOwnedCells = 0;
 private _ownerByCell = createHashMap;
 
+FLO_ObjectivePressureDirtyIds = createHashMap;
+
 {
     private _cell = FLO_ObjectiveCells get _x;
     private _owner = _cell get "owner";
@@ -41,6 +43,18 @@ private _ownerByCell = createHashMap;
 {
     _dirtyCellIds set [_x, true];
 } forEach ([_ownerByCell] call FLO_fnc_objectiveEvaluateGridInfluence);
+
+{
+    private _objective = FLO_Objectives get _x;
+
+    if ([_objective, _ownerByCell] call FLO_fnc_objectivePressureTick) then {
+        _dirtyObjectiveIds set [_x, true];
+    };
+} forEach keys FLO_Objectives;
+
+{
+    _dirtyObjectiveIds set [_x, true];
+} forEach keys FLO_ObjectivePressureDirtyIds;
 
 {
     private _objective = FLO_Objectives get _x;

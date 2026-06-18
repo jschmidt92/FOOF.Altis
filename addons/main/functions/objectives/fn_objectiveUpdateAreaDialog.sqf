@@ -30,7 +30,12 @@ _record params [
     ["_pendingUpgradeRemaining", 0],
     ["_capturedRestoreOwnerKey", "NONE"],
     ["_capturedRestoreLevel", 0],
-    ["_capturedRestoreRemaining", 0]
+    ["_capturedRestoreRemaining", 0],
+    ["_frontline", false],
+    ["_pressureWest", 0],
+    ["_pressureEast", 0],
+    ["_vulnerableSideKey", "NONE"],
+    ["_vulnerableRemaining", 0]
 ];
 
 private _playerSide = side group player;
@@ -52,6 +57,37 @@ private _ownerName = switch (_ownerKey) do {
     case "EAST": { "OPFOR" };
     default { "Neutral" };
 };
+private _attackerPressure = 0;
+private _attackerName = "Enemy";
+
+if (_ownerKey isEqualTo "WEST") then {
+    _attackerPressure = _pressureEast;
+    _attackerName = "OPFOR";
+};
+
+if (_ownerKey isEqualTo "EAST") then {
+    _attackerPressure = _pressureWest;
+    _attackerName = "BLUFOR";
+};
+
+private _pressureState = "Rear";
+
+if (_frontline) then {
+    _pressureState = "Frontline";
+};
+
+if (_attackerPressure > 0) then {
+    _pressureState = "Pressured";
+};
+
+if (_vulnerableSideKey isNotEqualTo "NONE" && {_vulnerableRemaining > 0}) then {
+    _pressureState = "Vulnerable";
+};
+
+if (_objectiveState isEqualTo "contested") then {
+    _pressureState = "Contested";
+};
+
 private _hasAuthority = [player, "build"] call FLO_fnc_commandPlayerHasAuthority;
 private _canUpgrade = (_playerSideKey isEqualTo _ownerKey) &&
     {_objectiveState isEqualTo "held"} &&
@@ -104,7 +140,14 @@ private _payload = createHashMapFromArray [
     ["pendingUpgradeRemaining", _pendingUpgradeRemaining],
     ["capturedRestoreOwner", _capturedRestoreOwnerKey],
     ["capturedRestoreLevel", _capturedRestoreLevel],
-    ["capturedRestoreRemaining", _capturedRestoreRemaining]
+    ["capturedRestoreRemaining", _capturedRestoreRemaining],
+    ["frontline", _frontline],
+    ["pressureState", _pressureState],
+    ["attackerName", _attackerName],
+    ["attackerPressure", _attackerPressure],
+    ["pressureThreshold", FLO_ObjectivePressureThreshold],
+    ["vulnerableSide", _vulnerableSideKey],
+    ["vulnerableRemaining", _vulnerableRemaining]
 ];
 
 private _script = format [

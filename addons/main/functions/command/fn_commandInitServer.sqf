@@ -45,8 +45,8 @@ FLO_CommandFactionOptions = createHashMapFromArray [
     ];
 } forEach ["WEST", "EAST"];
 
-FLO_CommandPlayerConnectedEh = addMissionEventHandler [
-    "PlayerConnected",
+FLO_CommandPlayerConnectedEh = [
+    "FLO_eventPlayerConnected",
     {
         params ["_id", "_uid", "_name", "_jip", "_owner"];
 
@@ -59,10 +59,10 @@ FLO_CommandPlayerConnectedEh = addMissionEventHandler [
             3
         ] call CBA_fnc_waitAndExecute;
     }
-];
+] call CBA_fnc_addEventHandler;
 
-FLO_CommandPlayerDisconnectedEh = addMissionEventHandler [
-    "PlayerDisconnected",
+FLO_CommandPlayerDisconnectedEh = [
+    "FLO_eventPlayerDisconnected",
     {
         params ["_id", "_uid", "_name"];
 
@@ -95,10 +95,10 @@ FLO_CommandPlayerDisconnectedEh = addMissionEventHandler [
             };
         } forEach ["WEST", "EAST"];
     }
-];
+] call CBA_fnc_addEventHandler;
 
-FLO_CommandEntityRespawnedEh = addMissionEventHandler [
-    "EntityRespawned",
+FLO_CommandEntityRespawnedEh = [
+    "FLO_eventEntityRespawned",
     {
         params ["_newEntity", "_oldEntity"];
 
@@ -106,7 +106,7 @@ FLO_CommandEntityRespawnedEh = addMissionEventHandler [
             [_newEntity] call FLO_fnc_commandApplyPlayerRoles;
         };
     }
-];
+] call CBA_fnc_addEventHandler;
 
 diag_log format [
     "[FLO][Command] Command voting initialized westFactions=%1 eastFactions=%2",

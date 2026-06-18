@@ -9,7 +9,6 @@ private _snapshot = [];
     private _objective = FLO_Objectives get _x;
     private _cellSnapshot = [];
     private _cellIds = +(_objective get "cellIds");
-    private _anchorCellId = _objective get "anchorCellId";
     private _pendingUpgradeLevel = _objective get "pendingUpgradeLevel";
     private _pendingUpgradeRemaining = 0;
     private _restoreRemaining = 0;
@@ -27,7 +26,7 @@ private _snapshot = [];
     {
         private _cell = FLO_ObjectiveCells get _x;
         private _progress = round ((_cell get "progress") * 20) / 20;
-        private _role = ["support", "anchor"] select (_x isEqualTo _anchorCellId);
+        private _role = _cell get "role";
 
         _cellSnapshot pushBack [
             _cell get "id",
@@ -65,7 +64,12 @@ private _snapshot = [];
         round _pendingUpgradeRemaining,
         [_objective get "capturedRestoreOwner"] call FLO_fnc_objectiveSideKey,
         _objective get "capturedRestoreLevel",
-        round _restoreRemaining
+        round _restoreRemaining,
+        _objective get "frontline",
+        round (_objective get "pressureWest"),
+        round (_objective get "pressureEast"),
+        [_objective get "vulnerableSide"] call FLO_fnc_objectiveSideKey,
+        round (((_objective get "vulnerableExpiresAt") - diag_tickTime) max 0)
     ];
 } forEach _objectiveIds;
 

@@ -26,6 +26,7 @@ IDS_Logistics_scrollHandler = -1;
 IDS_Logistics_keyDownHandler = -1;
 IDS_Logistics_keyUpHandler = -1;
 IDS_Logistics_dirUpdateEH = -1;
+IDS_Logistics_entityKilledHandler = -1;
 
 uiNamespace setVariable ["IDS_Logistics_shiftPressed", false];
 uiNamespace setVariable ["IDS_Logistics_ctrlPressed", false];
@@ -33,6 +34,19 @@ uiNamespace setVariable ["IDS_Logistics_altPressed", false];
 
 IDS_Logistics_Entities = [];
 private _entitiesConfig = configFile >> "CfgLogistics" >> "Entities";
+
+if (isServer) then {
+    IDS_Logistics_entityKilledHandler = [
+        "FLO_eventEntityKilled",
+        {
+            params ["_unit", "_killer", "_instigator", "_useEffects"];
+
+            if (_unit getVariable ["IDS_Logistics_isPlacedEntity", false]) then {
+                [_unit, _killer, _instigator, _useEffects] call IDS_Logistics_fnc_onEntityKilled;
+            };
+        }
+    ] call CBA_fnc_addEventHandler;
+};
 
 // Iterate through all entity classes in the config
 for "_i" from 0 to (count _entitiesConfig - 1) do {

@@ -103,10 +103,14 @@ if (_useCameraMode) then {
     IDS_Logistics_entityHeight = (_originalPos select 2) - _groundLevel;
 };
 
-// Add EachFrame event handler for continuous update
-IDS_Logistics_dirUpdateEH = addMissionEventHandler ["EachFrame", {
+// Add per-frame handler for continuous update
+IDS_Logistics_dirUpdateEH = [
+    {
     if (IDS_Logistics_isHolding && !isNull IDS_Logistics_currentEntity) then { [] call IDS_Logistics_fnc_updateEntityPlacement; };
-}];
+    },
+    0,
+    []
+] call CBA_fnc_addPerFrameHandler;
 
 // Add scroll wheel handler for adjustments
 IDS_Logistics_scrollHandler = (findDisplay 46) displayAddEventHandler ["MouseZChanged", {

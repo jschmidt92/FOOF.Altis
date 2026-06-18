@@ -14,7 +14,6 @@ private _westCount = _cell get "influenceWest";
 private _captureSide = sideUnknown;
 private _eastPresent = _eastCount > 0;
 private _westPresent = _westCount > 0;
-private _captureStep = FLO_ObjectiveCellCaptureRate * FLO_ObjectiveUpdateInterval;
 private _decayStep = FLO_ObjectiveCellDecayRate * FLO_ObjectiveUpdateInterval;
 private _passiveTargetSide = sideUnknown;
 
@@ -79,6 +78,9 @@ if (_eastPresent && _westPresent) then {
             private _frontlineCapture = ((_friendlyNeighborCount > 0) && {_ownedCellCount > 0}) || {_initialEntryCapture};
 
             if (_frontlineCapture) then {
+                private _captureSeconds = [_cell, _captureSide] call FLO_fnc_objectiveCellCaptureSeconds;
+                private _captureStep = FLO_ObjectiveUpdateInterval / _captureSeconds;
+
                 if (_progressSide isNotEqualTo _captureSide) then {
                     _progress = 0;
                     _progressSide = _captureSide;
@@ -90,6 +92,14 @@ if (_eastPresent && _westPresent) then {
                 if (_progress >= 1) then {
                     _owner = _captureSide;
                     _state = "held";
+
+                    private _objectiveId = _cell get "objectiveId";
+
+                    if (_objectiveId isNotEqualTo "") then {
+                        private _amount = [FLO_ObjectivePressureSupportCapture, FLO_ObjectivePressureAnchorCapture] select ((_cell get "role") isEqualTo "anchor");
+
+                        [_objectiveId, _captureSide, _amount, "cellCapture"] call FLO_fnc_objectivePressureAdd;
+                    };
                 };
             } else {
                 if (_owner isEqualTo sideUnknown) then {

@@ -226,8 +226,8 @@
 
         .right-stack {
             display: grid;
-            grid-template-rows: minmax(220px, 0.78fr) minmax(320px, 1.22fr);
-            gap: 14px;
+            grid-template-rows: minmax(0, 1fr) auto;
+            gap: 10px;
             min-height: 0;
             overflow: hidden;
         }
@@ -253,6 +253,21 @@
 
         .vote-panel {
             grid-template-rows: auto minmax(0, 1fr);
+        }
+
+        .role-panel {
+            grid-template-rows: auto auto;
+            align-self: end;
+            padding: 12px;
+        }
+
+        .role-panel .panel-title h2 {
+            font-size: 24px;
+        }
+
+        .role-panel .panel-title p {
+            margin-top: 5px;
+            font-size: 14px;
         }
 
         .panel-head {
@@ -373,19 +388,20 @@
             display: grid;
             grid-template-columns: 1fr;
             grid-auto-rows: auto;
-            gap: 10px;
+            gap: 6px;
             align-content: start;
             min-height: 0;
-            overflow: auto;
-            padding: 2px 6px 4px 0;
+            overflow: hidden;
+            padding: 0;
         }
 
         .role-card {
             display: grid;
-            grid-template-rows: auto auto minmax(0, 1fr);
-            gap: 14px;
-            min-height: 236px;
-            padding: 13px;
+            grid-template-columns: minmax(210px, 0.72fr) minmax(320px, 1fr);
+            grid-template-rows: auto auto;
+            gap: 8px 12px;
+            min-height: 106px;
+            padding: 12px;
             background:
                 linear-gradient(155deg, rgba(103, 232, 255, 0.08), rgba(103, 232, 255, 0) 38%),
                 rgba(20, 34, 48, 0.82);
@@ -394,7 +410,7 @@
         }
 
         .role-card.selected-target {
-            min-height: 292px;
+            min-height: 116px;
             background:
                 linear-gradient(155deg, rgba(37, 215, 255, 0.16), rgba(36, 124, 255, 0.08) 48%),
                 rgba(20, 34, 48, 0.86);
@@ -402,6 +418,8 @@
         }
 
         .role-top {
+            grid-column: 1;
+            grid-row: 1 / span 2;
             min-width: 0;
         }
 
@@ -416,9 +434,11 @@
         }
 
         .permission-detail {
+            grid-column: 2;
+            grid-row: 1;
             color: #A7B7C8;
-            font-size: 15px;
-            line-height: 1.32;
+            font-size: 14px;
+            line-height: 1.24;
         }
 
         .permission-detail strong {
@@ -429,7 +449,9 @@
 
         .role-actions {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-column: 2;
+            grid-row: 2;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 7px;
             align-self: end;
         }
@@ -796,7 +818,7 @@
                     <div class="vote-list faction-list" id="factionList"></div>
                 </section>
 
-                <section class="panel vote-panel">
+                <section class="panel vote-panel role-panel">
                     <div class="panel-head">
                         <div class="panel-title">
                             <div class="overline">Command Roles</div>

@@ -57,7 +57,7 @@ if (_storePurchaseId isNotEqualTo "") then {
 if (!isNil "IDS_Logistics_scrollHandler") then { (findDisplay 46) displayRemoveEventHandler ["MouseZChanged", IDS_Logistics_scrollHandler]; };
 if (!isNil "IDS_Logistics_keyDownHandler") then { (findDisplay 46) displayRemoveEventHandler ["KeyDown", IDS_Logistics_keyDownHandler]; };
 if (!isNil "IDS_Logistics_keyUpHandler") then { (findDisplay 46) displayRemoveEventHandler ["KeyUp", IDS_Logistics_keyUpHandler]; };
-if (!isNil "IDS_Logistics_dirUpdateEH") then { removeMissionEventHandler ["EachFrame", IDS_Logistics_dirUpdateEH]; };
+if (!isNil "IDS_Logistics_dirUpdateEH") then { [IDS_Logistics_dirUpdateEH] call CBA_fnc_removePerFrameHandler; };
 
 // Reset global state variables
 IDS_Logistics_isHolding = false;

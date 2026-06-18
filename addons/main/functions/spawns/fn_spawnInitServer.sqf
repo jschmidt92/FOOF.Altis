@@ -16,8 +16,8 @@ private _eastZone = FLO_DeploymentZones get "EAST";
 FLO_SpawnAssignmentReady = true;
 [] call FLO_fnc_spawnSyncStagingRespawns;
 
-FLO_SpawnPlayerConnectedEh = addMissionEventHandler [
-    "PlayerConnected",
+FLO_SpawnPlayerConnectedEh = [
+    "FLO_eventPlayerConnected",
     {
         params ["_id", "_uid", "_name", "_jip", "_owner"];
 
@@ -30,7 +30,7 @@ FLO_SpawnPlayerConnectedEh = addMissionEventHandler [
             3
         ] call CBA_fnc_waitAndExecute;
     }
-];
+] call CBA_fnc_addEventHandler;
 
 diag_log format [
     "[FLO][Spawn] Spawn assignment system initialized westCell=%1 eastCell=%2",

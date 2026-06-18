@@ -96,7 +96,8 @@ IDS_LOGISTICS_CAM_MAX_DISTANCE = 50; // Maximum distance in meters
 IDS_LOGISTICS_CAM_AT_LIMIT = false;  // Flag to prevent spam notifications
 
 // Add visual boundary system
-IDS_Logistics_BoundaryEH = addMissionEventHandler ["EachFrame", {
+IDS_Logistics_BoundaryEH = [
+    {
     if (!isNil "IDS_LOGISTICS_CAM" && {!isNull IDS_LOGISTICS_CAM}) then {
         private _center = IDS_LOGISTICS_CAM_INITIAL_POS;
         private _radius = IDS_LOGISTICS_CAM_MAX_DISTANCE;
@@ -221,10 +222,14 @@ IDS_Logistics_BoundaryEH = addMissionEventHandler ["EachFrame", {
             _arrow setObjectTexture [0, "#(rgb,8,8,3)color(0.5,0.1,0.1,0.5)"];
         } forEach _cardinalDirections;
     };
-}];
+    },
+    0,
+    []
+] call CBA_fnc_addPerFrameHandler;
 
 // Add range limitation check (50 meter radius from initial position)
-IDS_Logistics_DistanceCheckEH = addMissionEventHandler ["EachFrame", {
+IDS_Logistics_DistanceCheckEH = [
+    {
     if (!isNil "IDS_LOGISTICS_CAM" && {!isNull IDS_LOGISTICS_CAM}) then {
         private _currentPos = getPosASL IDS_LOGISTICS_CAM;
         private _initialPos = IDS_LOGISTICS_CAM_INITIAL_POS;
@@ -259,13 +264,16 @@ IDS_Logistics_DistanceCheckEH = addMissionEventHandler ["EachFrame", {
                     ["<t color='#FF8844'>Maximum camera distance reached (50m)</t>", 2] call IDS_Logistics_fnc_cameraHint;
                     IDS_LOGISTICS_CAM_AT_LIMIT = true;
                 };
-            }
+            };
         } else {
             // Reset the limit flag when back within bounds
             if (IDS_LOGISTICS_CAM_AT_LIMIT && _distance < (IDS_LOGISTICS_CAM_MAX_DISTANCE - 1)) then { IDS_LOGISTICS_CAM_AT_LIMIT = false; };
         };
     };
-}];
+    },
+    0,
+    []
+] call CBA_fnc_addPerFrameHandler;
 
 // Add mouse click handlers for the camera
 IDS_Logistics_MouseClicks pushBack ((findDisplay 46) displayAddEventHandler ["MouseButtonDown", {
@@ -478,11 +486,11 @@ _keyDown = (findDisplay 46) displayAddEventHandler ["KeyDown", {
 
             // Remove event handlers
             if (!isNil "IDS_Logistics_DistanceCheckEH") then { 
-                removeMissionEventHandler ["EachFrame", IDS_Logistics_DistanceCheckEH];
+                [IDS_Logistics_DistanceCheckEH] call CBA_fnc_removePerFrameHandler;
                 IDS_Logistics_DistanceCheckEH = nil;
             };
             if (!isNil "IDS_Logistics_BoundaryEH") then { 
-                removeMissionEventHandler ["EachFrame", IDS_Logistics_BoundaryEH];
+                [IDS_Logistics_BoundaryEH] call CBA_fnc_removePerFrameHandler;
                 IDS_Logistics_BoundaryEH = nil;
             };
             
@@ -623,15 +631,15 @@ _keyDown = (findDisplay 46) displayAddEventHandler ["KeyDown", {
         IDS_Logistics_keyUpHandler = nil;
     };
     if (!isNil "IDS_Logistics_dirUpdateEH") then { 
-        removeMissionEventHandler ["EachFrame", IDS_Logistics_dirUpdateEH];
+        [IDS_Logistics_dirUpdateEH] call CBA_fnc_removePerFrameHandler;
         IDS_Logistics_dirUpdateEH = nil;
     };
     if (!isNil "IDS_Logistics_DistanceCheckEH") then { 
-        removeMissionEventHandler ["EachFrame", IDS_Logistics_DistanceCheckEH];
+        [IDS_Logistics_DistanceCheckEH] call CBA_fnc_removePerFrameHandler;
         IDS_Logistics_DistanceCheckEH = nil;
     };
     if (!isNil "IDS_Logistics_BoundaryEH") then { 
-        removeMissionEventHandler ["EachFrame", IDS_Logistics_BoundaryEH];
+        [IDS_Logistics_BoundaryEH] call CBA_fnc_removePerFrameHandler;
         IDS_Logistics_BoundaryEH = nil;
     };
 

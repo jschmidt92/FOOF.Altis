@@ -8,6 +8,7 @@ FLO_ObjectiveSnapshotDelta = [];
 FLO_ObjectiveGridSnapshotDelta = [];
 FLO_ObjectivePendingGridCellIds = createHashMap;
 FLO_ObjectivePendingObjectiveIds = createHashMap;
+FLO_ObjectivePressureDirtyIds = createHashMap;
 FLO_DeploymentZones = createHashMap;
 FLO_DeploymentPairDiagnostics = createHashMap;
 FLO_ObjectivePresenceCellIds = [];
@@ -22,7 +23,8 @@ FLO_ObjectiveUpdateInterval = 5;
 FLO_ObjectiveSnapshotHeartbeat = 30;
 FLO_ObjectivePublishMinInterval = 2;
 FLO_ObjectiveMinCapturePlayers = 1;
-FLO_ObjectiveCellCaptureRate = 0.035 / 2;
+FLO_ObjectiveCellBaseCaptureSeconds = 60;
+FLO_ObjectiveCellCaptureSecondsPerLevel = 30;
 FLO_ObjectiveCellDecayRate = 0.01;
 FLO_ObjectiveGridCellSize = 1000;
 FLO_ObjectiveGridMinLandSamples = 1;
@@ -33,6 +35,17 @@ FLO_ObjectiveGridEncircleMinOwnedNeighbors = 5;
 FLO_ObjectivePerfLogThresholdMs = 20;
 FLO_ObjectiveGeneratedMaxObjectives = 80;
 FLO_ObjectiveGeneratedRequiredWeightRatio = 0.55;
+FLO_ObjectiveRequiredWeightRatioPerLevel = 0.05;
+FLO_ObjectiveRequiredWeightRatioMax = 0.80;
+FLO_ObjectivePressureThreshold = 100;
+FLO_ObjectivePressureReportRatio = 0.50;
+FLO_ObjectivePressureVulnerableDuration = 2700;
+FLO_ObjectivePressurePresencePerTick = 1;
+FLO_ObjectivePressureSupportCapture = 10;
+FLO_ObjectivePressureAnchorCapture = 25;
+FLO_ObjectivePressureDecayGrace = 300;
+FLO_ObjectivePressureDecayPerMinute = 3;
+FLO_ObjectivePressureVulnerableHardeningMultiplier = 0.50;
 FLO_ObjectiveGeneratedOverlapFactor = 0.45;
 FLO_ObjectiveGeneratedMarineMaxLandDistance = 1600;
 FLO_ObjectiveGeneratedClusterEnabled = true;
@@ -73,8 +86,8 @@ private _definitions = [] call FLO_fnc_objectiveGenerateDefinitions;
 
 [true] call FLO_fnc_objectivePublishSnapshot;
 
-FLO_ObjectivePlayerConnectedEh = addMissionEventHandler [
-    "PlayerConnected",
+FLO_ObjectivePlayerConnectedEh = [
+    "FLO_eventPlayerConnected",
     {
         params ["_id", "_uid", "_name", "_jip", "_owner"];
 
@@ -90,7 +103,7 @@ FLO_ObjectivePlayerConnectedEh = addMissionEventHandler [
             3
         ] call CBA_fnc_waitAndExecute;
     }
-];
+] call CBA_fnc_addEventHandler;
 
 if ((keys FLO_ObjectiveCells) isNotEqualTo []) then {
     [] call FLO_fnc_objectiveStartLoop;

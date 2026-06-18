@@ -61,12 +61,16 @@ IDS_Logistics_entityDistance = 5; // Initial distance from reference (in meters)
 // Initial placement using the update function
 [] call IDS_Logistics_fnc_updateEntityPlacement;
 
-// Add EachFrame event handler for continuous update
-IDS_Logistics_dirUpdateEH = addMissionEventHandler ["EachFrame", {
-    if (IDS_Logistics_isHolding && !isNull IDS_Logistics_currentEntity) then {
-        [] call IDS_Logistics_fnc_updateEntityPlacement;
-    };
-}];
+// Add per-frame handler for continuous update
+IDS_Logistics_dirUpdateEH = [
+    {
+        if (IDS_Logistics_isHolding && !isNull IDS_Logistics_currentEntity) then {
+            [] call IDS_Logistics_fnc_updateEntityPlacement;
+        };
+    },
+    0,
+    []
+] call CBA_fnc_addPerFrameHandler;
 
 // Add scroll wheel handler for height/rotation/distance adjustment
 IDS_Logistics_scrollHandler = (findDisplay 46) displayAddEventHandler ["MouseZChanged", {

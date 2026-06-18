@@ -6,14 +6,14 @@ FLO_IntelBaseFinds = createHashMapFromArray [
     ["EAST", 0]
 ];
 
-addMissionEventHandler [
-    "EntityKilled",
+FLO_IntelEntityKilledEh = [
+    "FLO_eventEntityKilled",
     {
         params ["_unit", "_killer", "_instigator", "_useEffects"];
 
         [_unit, _killer, _instigator, _useEffects] call FLO_fnc_intelRegisterBody;
     }
-];
+] call CBA_fnc_addEventHandler;
 
 diag_log format [
     "[FLO][Intel] Intel system initialized dropChance=%1 baseChance=%2 baseRadius=%3-%4 playerRadius=%5",

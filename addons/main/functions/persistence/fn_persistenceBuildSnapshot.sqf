@@ -121,6 +121,13 @@ private _objectiveLevelRecords = [];
         ["capturedRestoreOwner", [_objective get "capturedRestoreOwner"] call FLO_fnc_persistenceSideKey],
         ["capturedRestoreLevel", _objective get "capturedRestoreLevel"],
         ["capturedRestoreRemaining", _capturedRestoreRemaining],
+        ["frontline", _objective get "frontline"],
+        ["pressureWest", _objective get "pressureWest"],
+        ["pressureEast", _objective get "pressureEast"],
+        ["pressureWestLastAgo", diag_tickTime - (_objective get "pressureWestLastAt")],
+        ["pressureEastLastAgo", diag_tickTime - (_objective get "pressureEastLastAt")],
+        ["vulnerableSide", [_objective get "vulnerableSide"] call FLO_fnc_persistenceSideKey],
+        ["vulnerableRemaining", ((_objective get "vulnerableExpiresAt") - diag_tickTime) max 0],
         ["pendingUpgradeLevel", _objective get "pendingUpgradeLevel"],
         ["pendingUpgradeStartedAt", _objective get "pendingUpgradeStartedAt"],
         ["pendingUpgradeRemaining", _pendingUpgradeRemaining]

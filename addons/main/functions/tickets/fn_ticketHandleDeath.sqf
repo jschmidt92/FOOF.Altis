@@ -9,26 +9,64 @@ if (_uid isEqualTo "") then {
     _uid = _unit getVariable ["FLO_TicketPlayerUid", ""];
 };
 
-if (_uid isEqualTo "") exitWith {};
-
-private _sideKey = _unit getVariable ["FLO_TicketSideKey", ""];
-private _side = sideUnknown;
-
-if (_sideKey isEqualTo "") then {
-    _side = side group _unit;
-
-    if (_side in [west, east]) then {
-        _sideKey = [_side] call FLO_fnc_resourceSideKey;
-    };
-} else {
-    _side = switch (_sideKey) do {
-        case "WEST": { west };
-        case "EAST": { east };
-        default { sideUnknown };
+if (_uid isEqualTo "") exitWith {
+    if (isPlayer _unit) then {
+        diag_log format [
+            "[FLO][Tickets] Death ignored: missing uid unit=%1 currentSide=%2",
+            _unit,
+            side group _unit
+        ];
     };
 };
 
-if !(_side in [west, east]) exitWith {};
+private _sideKey = _unit getVariable ["FLO_TicketSideKey", ""];
+private _side = sideUnknown;
+private _currentSide = side group _unit;
+
+if (_sideKey isEqualTo "") then {
+    if (_uid in FLO_TicketPlayerSides) then {
+        _sideKey = FLO_TicketPlayerSides get _uid;
+    };
+};
+
+if (_sideKey isEqualTo "") then {
+    if (_currentSide in [west, east]) then {
+        _sideKey = [_currentSide] call FLO_fnc_resourceSideKey;
+    };
+};
+
+_side = switch (_sideKey) do {
+    case "WEST": { west };
+    case "EAST": { east };
+    default { sideUnknown };
+};
+
+if !(_side in [west, east]) exitWith {
+    private _storedSideForLog = "";
+
+    if (_uid in FLO_TicketPlayerSides) then {
+        _storedSideForLog = FLO_TicketPlayerSides get _uid;
+    };
+
+    diag_log format [
+        "[FLO][Tickets] Death ignored: unresolved side uid=%1 sideKey=%2 currentSide=%3 storedSide=%4 unit=%5",
+        _uid,
+        _sideKey,
+        _currentSide,
+        _storedSideForLog,
+        _unit
+    ];
+};
+
+if ((_currentSide isEqualTo civilian) && {_sideKey in ["WEST", "EAST"]}) then {
+    diag_log format [
+        "[FLO][Tickets] Death resolved from civilian/downed unit uid=%1 ticketSide=%2 unit=%3",
+        _uid,
+        _sideKey,
+        _unit
+    ];
+};
+
 if (_unit getVariable ["FLO_TicketDeathHandled", false]) exitWith {};
 _unit setVariable ["FLO_TicketDeathHandled", true];
 

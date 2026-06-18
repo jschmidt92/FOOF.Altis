@@ -34,7 +34,10 @@ FOOF currently requires CBA_A3.
 - Player-driven sector capture is tuned around one minute under uncontested pressure; natural spread and encirclement are deliberately slower so players remain the primary way to move the frontline.
 - Server-owned BLUFOR/OPFOR currency starts at `$5000` and is generated from controlled grid cells and upgraded high-value objectives.
 - Captured AOs have levels from `0` to `5`; commander-authorized players can start timed upgrades on friendly uncontested AOs from inside the AO.
-- Enemy capture reduces an AO by one level instead of wiping it. If the previous owner recaptures it within 30 minutes, the original level is restored.
+- AO upgrades harden linked sectors: capturing a linked sector takes `60s + 30s` per defending AO level, and attackers must control a larger share of linked sectors to flip upgraded AOs.
+- Frontline AO pressure adds a siege layer: enemy presence in linked cells and captured support/anchor cells build pressure; at full pressure the AO becomes vulnerable for 45 minutes and upgrade hardening is weakened.
+- AO pressure reports use command-style tactical language instead of public progress meters. Exact pressure values stay in the AO panel; normal players hear about line-of-contact changes, sustained enemy movement, exposure windows, and fading momentum.
+- Enemy capture or destabilization reduces an AO by one level instead of wiping it. If the previous owner recaptures it within 30 minutes, the original level is restored.
 - A compact in-world AO panel opens with `Ctrl+Shift+O` while standing inside an AO and shows owner, level, income per 15 minutes, upgrade cost, upgrade timer, and upgrade availability.
 - Server-authoritative commander and faction voting for BLUFOR and OPFOR with timed startup and replacement commander vote windows.
 - Startup commander/faction votes resolve to a deterministic fallback on expiry so a side cannot leave opening votes without command or faction setup.
@@ -57,6 +60,9 @@ FOOF currently requires CBA_A3.
 - Server-owned BLUFOR/OPFOR ticket pools control respawn allowance; respawns spend one side ticket.
 - Commanders can buy reinforcement ticket packs from the Store with faction currency; ticket packs are commander-only.
 - Native notification and announcement framework replaces ad hoc hints for player-facing feedback.
+- Announcements render as compact top-center command banners, while normal notifications stack as smaller right-side tactical cards.
+- Objective pressure alerts are state-change driven and side-specific so they feel like battlefield reports instead of arcade score events.
+- Central CBA event adapter normalizes player connect/disconnect, disconnect handling, entity death, and entity respawn into shared `FLO_event*` events so gameplay systems do not each install raw Bohemia mission handlers.
 - Dead enemy player bodies can be searched through a compact HTML intel panel; the server decides whether the body has no intel, enemy movement intel, or rare FOB/COP radius intel.
 - Recovered intel creates temporary local map-radius markers instead of exact enemy positions.
 - Server-authenticated objective updates for normal play, with full snapshots for startup and reconnects.
@@ -65,6 +71,7 @@ FOOF currently requires CBA_A3.
 
 - Addon root: `addons/main`
 - Addon config: `addons/main/config.cpp`
+- Event adapter: `addons/main/functions/events/`
 - Command/faction voting: `addons/main/functions/command/`
 - Objective system: `addons/main/functions/objectives/`
 - Resource system: `addons/main/functions/resources/`
@@ -82,6 +89,8 @@ FOOF currently requires CBA_A3.
 - AO info UI: `addons/main/ui/objective/`
 - Startup: addon `postInit` during normal missions; Arma engine intro missions are skipped.
 - Dev test mission: `missions/FOOF_Test.Altis`
+
+Gameplay systems should subscribe to CBA `FLO_event*` events instead of adding their own raw Bohemia mission event handlers. The only raw mission event adapter should live in `addons/main/functions/events/`. UI display input handlers may still use Arma display handlers where that is the correct UI API.
 
 ## Building and Testing
 

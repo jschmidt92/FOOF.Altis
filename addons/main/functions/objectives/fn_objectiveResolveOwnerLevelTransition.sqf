@@ -48,6 +48,23 @@ if ((_oldOwner in [west, east]) && {_newOwner in [west, east]} && {_oldOwner isN
     ];
 };
 
+if ((_oldOwner in [west, east]) && {_newOwner isEqualTo sideUnknown}) exitWith {
+    _objective set ["level", (_oldLevel - 1) max 0];
+    _objective set ["capturedRestoreOwner", _oldOwner];
+    _objective set ["capturedRestoreLevel", _oldLevel];
+    _objective set ["capturedRestoreExpiresAt", _now + FLO_ObjectiveRestoreWindow];
+    _objective set ["lastLevelChanged", _now];
+
+    diag_log format [
+        "[FLO][Objective] AO %1 destabilized from %2; level reduced from %3 to %4 restoreWindow=%5",
+        _objective get "id",
+        [_oldOwner] call FLO_fnc_objectiveSideKey,
+        _oldLevel,
+        _objective get "level",
+        FLO_ObjectiveRestoreWindow
+    ];
+};
+
 if (_newOwner isEqualTo sideUnknown) exitWith {
     _objective set ["lastLevelChanged", _now];
 };

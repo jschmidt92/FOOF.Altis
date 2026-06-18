@@ -62,19 +62,4 @@ _record set ["actionJipId", _actionJipId];
 [_id] call FLO_fnc_fobSyncRespawn;
 [_side] call FLO_fnc_spawnEnsureSideRespawn;
 
-_fob addEventHandler [
-    "Killed",
-    {
-        params ["_unit"];
-
-        private _id = _unit getVariable ["FLO_FOB_Id", ""];
-
-        if (_id isNotEqualTo "") then {
-            private _type = _unit getVariable ["FLO_FOB_Type", "FOB"];
-            [_id, false, true] call FLO_fnc_fobUnregister;
-            diag_log format ["[FLO][FOB] %1 %2 destroyed", _type, _id];
-        };
-    }
-];
-
 _id

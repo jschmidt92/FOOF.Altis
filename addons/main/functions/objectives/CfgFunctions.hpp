@@ -10,6 +10,7 @@ class Objective {
     class objectiveBuildNeutralGridSnapshot {};
     class objectiveBuildSnapshot {};
     class objectiveBuildDeploymentCandidate {};
+    class objectiveCellCaptureSeconds {};
     class objectiveClientInit {};
     class objectiveCollectPresence {};
     class objectiveDeploymentEntryCells {};
@@ -38,12 +39,17 @@ class Objective {
     class objectivePreInit {
         preInit = 1;
     };
+    class objectivePressureAdd {};
+    class objectivePressureReport {};
+    class objectivePressureMultiplier {};
+    class objectivePressureTick {};
     class objectivePublishSnapshot {};
     class objectiveReceiveGridSnapshot {};
     class objectiveReceiveSnapshot {};
     class objectiveRegister {};
     class objectiveRequestSnapshot {};
     class objectiveRequestUpgrade {};
+    class objectiveRequiredWeightRatio {};
     class objectiveResolveObjective {};
     class objectiveResolveOwnerLevelTransition {};
     class objectiveSanitizeId {};
