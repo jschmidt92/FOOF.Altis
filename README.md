@@ -27,6 +27,7 @@ FOOF currently requires CBA_A3.
 - Initial player deployment waits for generated deployment zones to be ready on the server before teleporting clients.
 - Deployment assignment searches for a dry position inside the generated staging cell, so editor-placed playable units are only temporary mission placeholders.
 - Dedicated clients retry initial deployment until the server assignment or persisted player restore is actually applied, and the server also resyncs spawn assignment after player connect.
+- Fresh deployment and normal respawn always give the player a map if they do not already have one, plus a uniform from the side's selected Store faction when available; persisted player kits restore exactly as saved.
 - Generated BLUFOR/OPFOR staging cells are registered as temporary respawn positions until that side places its first FOB/COP.
 - Respawn uses Arma `MenuPosition` with server-registered staging, FOB, and active COP positions; staging remains as a fallback whenever a side has no active base respawn.
 - Slow spearhead-style pressure from captured cells.

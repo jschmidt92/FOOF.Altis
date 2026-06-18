@@ -96,8 +96,10 @@ if ((_uid isNotEqualTo "") && {_uid in FLO_SpawnPlayerAssignments}) exitWith {
         [_player, _attempt + 1, _requestOwner] call FLO_fnc_spawnRequestAssignment;
     } else {
         private _resetPlayerState = _player getVariable ["FLO_Spawn_ResetBeforeAssignment", false];
+        private _uniformClass = [_sideKey] call FLO_fnc_spawnSideStoreUniform;
         private _clientPayload = +_payload;
         _clientPayload pushBack _resetPlayerState;
+        _clientPayload pushBack _uniformClass;
 
         _player setVariable ["FLO_Spawn_AssignedCellId", _payload # 3, true];
         _clientPayload remoteExecCall ["FLO_fnc_spawnApplyAssignment", _owner];
@@ -135,8 +137,10 @@ private _spawnASL = ATLToASL _spawnATL;
 private _dir = _zone get "dir";
 private _payload = [_spawnASL, _dir, _sideKey, _cellId];
 private _resetPlayerState = _player getVariable ["FLO_Spawn_ResetBeforeAssignment", false];
+private _uniformClass = [_sideKey] call FLO_fnc_spawnSideStoreUniform;
 private _clientPayload = +_payload;
 _clientPayload pushBack _resetPlayerState;
+_clientPayload pushBack _uniformClass;
 
 _player setVariable ["FLO_Spawn_AssignedCellId", _cellId, true];
 

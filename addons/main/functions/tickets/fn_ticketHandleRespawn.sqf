@@ -15,6 +15,12 @@ if (_uid isEqualTo "") exitWith {};
 if (_unit getVariable ["FLO_TicketRespawnHandled", false]) exitWith {};
 _unit setVariable ["FLO_TicketRespawnHandled", true];
 
+private _sideKey = [_side] call FLO_fnc_resourceSideKey;
+private _uniformClass = [_sideKey] call FLO_fnc_spawnSideStoreUniform;
+
+[_unit, _uniformClass] remoteExecCall ["FLO_fnc_spawnEnsureFreshUniform", owner _unit];
+[_unit] remoteExecCall ["FLO_fnc_spawnEnsureMap", owner _unit];
+
 private _deathState = createHashMap;
 
 if (_uid in FLO_TicketDeathStates) then {
@@ -64,7 +70,6 @@ if (_deathResult isNotEqualTo "") exitWith {
 };
 
 if !([_side, FLO_TicketRespawnCost, format ["respawn %1", _uid]] call FLO_fnc_ticketConsume) exitWith {
-    private _sideKey = [_side] call FLO_fnc_resourceSideKey;
     private _message = format ["%1 has no respawn tickets.", _sideKey];
 
     [_unit, true, _message] call FLO_fnc_ticketSyncPlayer;

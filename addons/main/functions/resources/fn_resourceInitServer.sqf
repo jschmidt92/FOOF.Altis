@@ -35,7 +35,7 @@ FLO_ResourceLoopHandle = -1;
 FLO_ResourceSnapshotScheduled = false;
 
 FLO_ResourceTickInterval = 60;
-FLO_ResourceCellIncome = 1;
+FLO_ResourceCellIncome = 2;
 FLO_ResourceVehicleSellbackRate = 0.45;
 FLO_ResourceSnapshotBroadcastDelay = 0.5;
 
