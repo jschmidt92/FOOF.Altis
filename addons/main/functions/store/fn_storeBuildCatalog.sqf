@@ -94,6 +94,7 @@ private _factionUsesVanillaGear = [_factionClass] call FLO_fnc_storeFactionUsesV
         ["name", _name],
         ["category", "tickets"],
         ["entryKind", "ticket"],
+        ["deploymentFundEligible", false],
         ["ticketCount", _ticketCount],
         ["priceValue", _price],
         ["price", format ["%1", _price]],

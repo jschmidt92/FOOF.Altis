@@ -2,7 +2,9 @@ params ["_access"];
 
 private _sideKey = _access get "sideKey";
 private _state = FLO_CommandSideState get _sideKey;
-private _canBuyTickets = (_state get "commanderUid") isEqualTo (getPlayerUID (_access get "player"));
+private _playerUid = getPlayerUID (_access get "player");
+private _canBuyTickets = (_state get "commanderUid") isEqualTo _playerUid;
+private _deploymentFund = [_playerUid] call FLO_fnc_storeEnsureDeploymentFund;
 private _catalog = [
     _sideKey,
     _access get "factionClass",
@@ -36,6 +38,8 @@ createHashMapFromArray [
     ["factionClass", _catalog get "factionClass"],
     ["factionName", _catalog get "factionName"],
     ["balance", FLO_ResourceBalances get _sideKey],
+    ["deploymentFund", _deploymentFund],
+    ["deploymentFundAmount", FLO_StoreDeploymentFundAmount],
     ["tickets", FLO_TicketBalances get _sideKey],
     ["canBuyTickets", _canBuyTickets],
     ["categories", _categories],

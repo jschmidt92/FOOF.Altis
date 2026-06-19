@@ -381,6 +381,19 @@ if ("store" in _snapshot) then {
         FLO_StorePurchasedVehicleCounter = _store get "purchasedVehicleCounter";
     };
 
+    FLO_StoreDeploymentFunds = createHashMap;
+
+    if ("deploymentFunds" in _store) then {
+        {
+            private _record = createHashMapFromArray _x;
+            private _uid = _record get "uid";
+
+            if (_uid isNotEqualTo "") then {
+                FLO_StoreDeploymentFunds set [_uid, ((_record get "remaining") max 0) min FLO_StoreDeploymentFundAmount];
+            };
+        } forEach (_store get "deploymentFunds");
+    };
+
     FLO_StorePendingVehicles = [];
 
     if ("pendingVehicles" in _store) then {

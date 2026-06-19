@@ -32,6 +32,8 @@ private _side = _access get "side";
 private _sideKey = _access get "sideKey";
 private _fob = _access get "fob";
 private _fobRecord = _access get "fobRecord";
+private _playerUid = getPlayerUID (_access get "player");
+private _deploymentFundRemaining = [_playerUid] call FLO_fnc_storeEnsureDeploymentFund;
 private _catalog = [
     _sideKey,
     _access get "factionClass",
@@ -52,6 +54,7 @@ private _itemIndex = createHashMap;
 private _ok = true;
 private _message = "";
 private _total = 0;
+private _deploymentEligibleTotal = 0;
 private _gearEntries = [];
 private _vehicleJobs = [];
 private _ticketCount = 0;
@@ -114,6 +117,14 @@ for "_i" from 0 to ((count _cart) - 1) do {
                                         private _lineTotal = (_item get "priceValue") * _quantity;
                                         _total = _total + _lineTotal;
 
+                                        if ([
+                                            _item get "entryKind",
+                                            _item get "category",
+                                            _item get "priceValue"
+                                        ] call FLO_fnc_storeDeploymentFundEligible) then {
+                                            _deploymentEligibleTotal = _deploymentEligibleTotal + _lineTotal;
+                                        };
+
                                         switch (_item get "entryKind") do {
                                             case "ticket": {
                                                 private _state = FLO_CommandSideState get _sideKey;
@@ -174,6 +185,8 @@ if (!_ok) exitWith {
         ["success", false],
         ["message", _message],
         ["balance", FLO_ResourceBalances get _sideKey],
+        ["deploymentFund", _deploymentFundRemaining],
+        ["deploymentFundAmount", FLO_StoreDeploymentFundAmount],
         ["tickets", FLO_TicketBalances get _sideKey]
     ]
 };
@@ -183,17 +196,29 @@ if (_total <= 0) exitWith {
         ["success", false],
         ["message", "Checkout total is invalid."],
         ["balance", FLO_ResourceBalances get _sideKey],
+        ["deploymentFund", _deploymentFundRemaining],
+        ["deploymentFundAmount", FLO_StoreDeploymentFundAmount],
         ["tickets", FLO_TicketBalances get _sideKey]
     ]
 };
 
-if !([_side, _total, "Store checkout"] call FLO_fnc_resourceSpend) exitWith {
+private _deploymentFundSpent = (_deploymentFundRemaining min _deploymentEligibleTotal) min _total;
+private _factionTotal = _total - _deploymentFundSpent;
+
+if ((_factionTotal > 0) && {!([_side, _factionTotal, "Store checkout"] call FLO_fnc_resourceSpend)}) exitWith {
     createHashMapFromArray [
         ["success", false],
-        ["message", format ["Not enough faction currency. Required: %1.", _total]],
+        ["message", format ["Not enough faction currency. Required: %1.", _factionTotal]],
         ["balance", FLO_ResourceBalances get _sideKey],
+        ["deploymentFund", _deploymentFundRemaining],
+        ["deploymentFundAmount", FLO_StoreDeploymentFundAmount],
         ["tickets", FLO_TicketBalances get _sideKey]
     ]
+};
+
+if (_deploymentFundSpent > 0) then {
+    _deploymentFundRemaining = _deploymentFundRemaining - _deploymentFundSpent;
+    FLO_StoreDeploymentFunds set [_playerUid, _deploymentFundRemaining];
 };
 
 private _pendingVehicles = [];
@@ -251,10 +276,12 @@ if (_gearEntries isNotEqualTo []) then {
 };
 
 diag_log format [
-    "[FLO][Store] %1 checkout player=%2 total=%3 gear=%4 pendingVehicles=%5 tickets=%6 balance=%7",
+    "[FLO][Store] %1 checkout player=%2 total=%3 deployment=%4 faction=%5 gear=%6 pendingVehicles=%7 tickets=%8 balance=%9",
     _sideKey,
     name (_access get "player"),
     _total,
+    _deploymentFundSpent,
+    _factionTotal,
     count _gearEntries,
     count _pendingVehicles,
     _ticketCount,
@@ -267,6 +294,10 @@ createHashMapFromArray [
     ["success", true],
     ["message", format ["Purchased %1 gear lines, %2 vehicles, and %3 tickets for %4.", count _gearEntries, count _pendingVehicles, _ticketCount, _total]],
     ["balance", FLO_ResourceBalances get _sideKey],
+    ["deploymentFund", _deploymentFundRemaining],
+    ["deploymentFundAmount", FLO_StoreDeploymentFundAmount],
+    ["deploymentFundSpent", _deploymentFundSpent],
+    ["factionSpent", _factionTotal],
     ["tickets", FLO_TicketBalances get _sideKey],
     ["spent", _total],
     ["gearCount", count _gearEntries],

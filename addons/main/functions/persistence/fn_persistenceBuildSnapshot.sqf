@@ -211,9 +211,19 @@ private _pendingVehicleRecords = [];
     ];
 } forEach FLO_StorePendingVehicles;
 
+private _deploymentFundRecords = [];
+
+{
+    _deploymentFundRecords pushBack [
+        ["uid", _x],
+        ["remaining", _y]
+    ];
+} forEach FLO_StoreDeploymentFunds;
+
 private _store = [
     ["pendingVehicleCounter", FLO_StorePendingVehicleCounter],
     ["purchasedVehicleCounter", FLO_StorePurchasedVehicleCounter],
+    ["deploymentFunds", _deploymentFundRecords],
     ["pendingVehicles", _pendingVehicleRecords]
 ];
 

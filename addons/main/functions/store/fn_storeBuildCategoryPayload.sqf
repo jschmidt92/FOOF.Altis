@@ -27,7 +27,9 @@ private _catalog = [
 ] call FLO_fnc_storeBuildCatalog;
 private _itemsByCategory = _catalog get "itemsByCategory";
 private _state = FLO_CommandSideState get (_access get "sideKey");
-private _canBuyTickets = (_state get "commanderUid") isEqualTo (getPlayerUID (_access get "player"));
+private _playerUid = getPlayerUID (_access get "player");
+private _canBuyTickets = (_state get "commanderUid") isEqualTo _playerUid;
+private _deploymentFund = [_playerUid] call FLO_fnc_storeEnsureDeploymentFund;
 
 createHashMapFromArray [
     ["success", true],
@@ -36,6 +38,8 @@ createHashMapFromArray [
     ["label", _label],
     ["items", _itemsByCategory get _category],
     ["balance", FLO_ResourceBalances get (_access get "sideKey")],
+    ["deploymentFund", _deploymentFund],
+    ["deploymentFundAmount", FLO_StoreDeploymentFundAmount],
     ["tickets", FLO_TicketBalances get (_access get "sideKey")],
     ["canBuyTickets", _canBuyTickets]
 ]

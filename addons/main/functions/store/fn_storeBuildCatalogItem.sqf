@@ -32,12 +32,14 @@ if (_image isEqualTo "") then {
 };
 
 private _price = [_className, _category, _entryKind] call FLO_fnc_storePriceClass;
+private _deploymentFundEligible = [_entryKind, _category, _price] call FLO_fnc_storeDeploymentFundEligible;
 
 createHashMapFromArray [
     ["className", _className],
     ["name", _name],
     ["category", _category],
     ["entryKind", _entryKind],
+    ["deploymentFundEligible", _deploymentFundEligible],
     ["priceValue", _price],
     ["price", format ["%1", _price]],
     ["image", _image]

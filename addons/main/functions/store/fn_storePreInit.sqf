@@ -3,6 +3,20 @@ FLO_StoreBrowserIdc = 9801;
 FLO_StoreActiveFobNetId = "";
 FLO_StoreClientPendingVehicles = [];
 FLO_StorePurchasedVehicleKilledEh = -1;
+FLO_StoreDeploymentFundAmount = 1000;
+FLO_StoreDeploymentFundMaxItemPrice = 650;
+FLO_StoreDeploymentFundCategories = [
+    "primary",
+    "handgun",
+    "uniforms",
+    "vests",
+    "headgear",
+    "facewear",
+    "backpacks",
+    "attachments",
+    "ammo",
+    "misc"
+];
 
 FLO_StoreCategories = [
     ["primary", "Primary"],

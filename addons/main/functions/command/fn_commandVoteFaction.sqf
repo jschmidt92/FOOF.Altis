@@ -21,6 +21,10 @@ if (_factionClass isEqualTo "") exitWith {};
 private _sideKey = [_side] call FLO_fnc_resourceSideKey;
 private _state = FLO_CommandSideState get _sideKey;
 
+if ((_state get "factionClass") isNotEqualTo "") exitWith {
+    [_player] call FLO_fnc_commandSendSnapshot;
+};
+
 if !(_state get "factionVoteOpen") exitWith {
     [_player] call FLO_fnc_commandSendSnapshot;
 };

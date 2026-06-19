@@ -3,6 +3,9 @@ params ["_sideKey", "_kind", "_reason", "_duration"];
 if (!isServer) exitWith {};
 
 private _state = FLO_CommandSideState get _sideKey;
+
+if ((_kind isEqualTo "faction") && {(_state get "factionClass") isNotEqualTo ""}) exitWith { "" };
+
 private _endsAt = diag_tickTime + _duration;
 private _promptId = format ["%1:%2:%3:%4", _sideKey, _kind, _reason, floor (_endsAt * 1000)];
 

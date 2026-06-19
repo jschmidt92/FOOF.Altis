@@ -43,6 +43,7 @@ FOOF currently requires CBA_A3.
 - A compact in-world AO panel opens with `Ctrl+Shift+O` while standing inside an AO and shows owner, level, income per 15 minutes, upgrade cost, upgrade timer, and upgrade availability.
 - Server-authoritative commander and faction voting for BLUFOR and OPFOR with timed startup and replacement commander vote windows.
 - Startup commander/faction votes resolve to a deterministic fallback on expiry so a side cannot leave opening votes without command or faction setup.
+- Faction voting locks permanently for the current persistence save once a side selects a faction; commander replacement votes do not reopen faction selection.
 - HTML command panel using Arma's web browser control for commander/faction voting and commander-managed side roles.
 - Command panel can be reopened with `Ctrl+Shift+C`; elected commanders can assign one deputy commander plus scaling medic, doctor, and engineer slots.
 - Command roles are server-owned, persisted, and reapplied on reconnect/respawn; ACE medical and repair role variables are applied as effects for assigned medics, doctors, and engineers.
@@ -56,6 +57,7 @@ FOOF currently requires CBA_A3.
 - Store attached to friendly FOB buildings for same-side faction equipment and vehicle purchases.
 - Store catalogs are generated from the selected faction's loaded config classes; no player-edited store definition files are required.
 - Store catalogs also append optional support gear without player-edited definitions: reviewed vanilla GPS and cTab/NSWDG device classes plus source-filtered ACRE/TFAR radio and ACE/KAT/ACM support items when those mods are loaded. Optional support mods follow a Forge-style model: detect the loaded `CfgPatches` entry, then include visible classes whose class/source tokens match that mod.
+- Each player receives a one-time `$1000` Deployment Fund for the current persistence save. It is UID-based, spends before faction balance on eligible personal gear, and disappears from the Store UI once fully spent.
 - Vanilla Arma voice/comms channels are disabled addon-side while side text chat remains available. When ACRE is loaded, FOOF enables side-separated Babel languages and side-separated radio frequencies so BLUFOR and OPFOR start on isolated comms.
 - Store uses a cinematic tactical armory UI with item previews, equipment/cart summaries, personal saved kits, and clickable cart targets for putting ammo/items into uniform, vest, or backpack during checkout.
 - Store vehicle checkout creates a pending vehicle placement; the player places the purchased vehicle with the IDS camera inside the purchase FOB build radius.

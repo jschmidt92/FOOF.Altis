@@ -4,6 +4,16 @@ if (!isServer) exitWith { false };
 
 private _sideKey = [_side] call FLO_fnc_resourceSideKey;
 private _state = FLO_CommandSideState get _sideKey;
+
+if ((_state get "factionClass") isNotEqualTo "") exitWith {
+    _state set ["factionVoteOpen", false];
+    _state set ["factionVoteReason", ""];
+    _state set ["factionVoteEndsAt", 0];
+    _state set ["factionVotePromptId", ""];
+    _state set ["factionVotes", createHashMap];
+    false
+};
+
 private _players = [_side] call FLO_fnc_commandSidePlayers;
 private _votes = _state get "factionVotes";
 private _activeUids = createHashMap;

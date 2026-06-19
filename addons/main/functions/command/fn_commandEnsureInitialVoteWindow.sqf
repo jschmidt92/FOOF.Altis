@@ -9,12 +9,24 @@ if (_state get "initialVoteStarted") exitWith { false };
 
 _state set ["initialVoteStarted", true];
 
-[_sideKey, "commander", "initial", FLO_CommandInitialVoteDuration] call FLO_fnc_commandStartVoteWindow;
-[_sideKey, "faction", "initial", FLO_CommandInitialVoteDuration] call FLO_fnc_commandStartVoteWindow;
+private _openedCommander = false;
+private _openedFaction = false;
+
+if ((_state get "commanderUid") isEqualTo "") then {
+    [_sideKey, "commander", "initial", FLO_CommandInitialVoteDuration] call FLO_fnc_commandStartVoteWindow;
+    _openedCommander = true;
+};
+
+if ((_state get "factionClass") isEqualTo "") then {
+    [_sideKey, "faction", "initial", FLO_CommandInitialVoteDuration] call FLO_fnc_commandStartVoteWindow;
+    _openedFaction = true;
+};
 
 diag_log format [
-    "[FLO][Command] %1 initial command and faction vote window opened",
-    _sideKey
+    "[FLO][Command] %1 initial vote window opened commander=%2 faction=%3",
+    _sideKey,
+    _openedCommander,
+    _openedFaction
 ];
 
-true
+_openedCommander || {_openedFaction}
