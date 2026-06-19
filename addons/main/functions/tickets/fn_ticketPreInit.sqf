@@ -1,4 +1,4 @@
-FLO_TicketInitialBalance = 50;
+FLO_TicketInitialBalance = 25;
 FLO_TicketRespawnCost = 1;
 FLO_TicketRespawnDelay = 10;
 FLO_TicketNoTicketRespawnDelay = 999999;
