@@ -66,6 +66,7 @@ FOOF currently requires CBA_A3.
 - Server-owned BLUFOR/OPFOR ticket pools control respawn allowance; respawns spend one side ticket.
 - Commanders can buy reinforcement ticket packs from the Store with faction currency; ticket packs are commander-only.
 - Server persistence saves mission state to Arma's `missionProfileNamespace`.
+- Admin persistence reset is available through FOOF functions so test servers can wipe state without hunting profile files.
 - Native notification and announcement framework replaces ad hoc hints for player-facing feedback.
 - Announcements render as compact top-center command banners, while normal notifications stack as smaller right-side tactical cards.
 - Objective pressure alerts are state-change driven and side-specific so players only get meaningful contact-line and assault-window reports.
@@ -112,6 +113,24 @@ HEMTT project config is included for local addon checks and launch workflow.
 .\.tools\hemtt\hemtt.exe build --no-bin --no-rap
 .\.tools\hemtt\hemtt.exe launch
 ```
+
+### Resetting Persistence
+
+FOOF persistence lives under the server's `missionProfileNamespace` key for the active world. Deleting profile files while the mission is running can fail because the live server state may save itself again.
+
+From a server-side console:
+
+```sqf
+[true, "admin reset"] call FLO_fnc_persistenceResetServer;
+```
+
+From a logged-in admin client debug console:
+
+```sqf
+[player, true] remoteExecCall ["FLO_fnc_persistenceRequestReset", 2];
+```
+
+Both forms disable persistence, stop the persistence save loop, clear the active save key, flush `missionProfileNamespace`, and notify players when the first argument is `true`. Complete the wipe by restarting the dedicated server process from the host panel. Arma's in-game `#restart` only restarts the mission and can reload stale mission-profile state.
 
 ## Known Issues
 

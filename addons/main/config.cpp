@@ -206,6 +206,11 @@ class CfgRemoteExec {
             jip = 0;
         };
 
+        class FLO_fnc_persistenceRequestReset {
+            allowedTargets = 2;
+            jip = 0;
+        };
+
         class FLO_fnc_ticketApplyRespawnLock {
             allowedTargets = 1;
             jip = 0;

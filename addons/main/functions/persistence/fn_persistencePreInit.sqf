@@ -9,4 +9,6 @@ FLO_PersistenceDirty = false;
 FLO_PersistenceSaveScheduled = false;
 FLO_PersistenceLoaded = false;
 FLO_PersistenceLastSaveAt = 0;
+FLO_PersistenceLoopHandle = -1;
+FLO_PersistenceResetPending = false;
 FLO_PersistencePlayerRecords = createHashMap;
