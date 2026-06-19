@@ -33,10 +33,7 @@ private _factionUsesVanillaGear = [_factionClass] call FLO_fnc_storeFactionUsesV
     _weapons append getArray (_unitCfg >> "respawnWeapons");
 
     {
-        if (_x in ["Throw", "Put"]) then { continue };
-
-        private _category = [_x] call FLO_fnc_storeCategoryForWeapon;
-        [_itemsByCategory, _seen, _x, "gear", _category] call FLO_fnc_storeAppendCatalogItem;
+        [_itemsByCategory, _seen, _x] call FLO_fnc_storeAppendGearWeapon;
     } forEach _weapons;
 
     private _linkedItems = [];
@@ -48,8 +45,7 @@ private _factionUsesVanillaGear = [_factionClass] call FLO_fnc_storeFactionUsesV
     {
         if (!_factionUsesVanillaGear && {[_x] call FLO_fnc_storeIsVanillaDefaultNvg}) then { continue };
 
-        private _category = [_x] call FLO_fnc_storeCategoryForWeapon;
-        [_itemsByCategory, _seen, _x, "gear", _category] call FLO_fnc_storeAppendCatalogItem;
+        [_itemsByCategory, _seen, _x] call FLO_fnc_storeAppendGearWeapon;
     } forEach _linkedItems;
 
     private _magazines = [];
@@ -57,19 +53,20 @@ private _factionUsesVanillaGear = [_factionClass] call FLO_fnc_storeFactionUsesV
     _magazines append getArray (_unitCfg >> "respawnMagazines");
 
     {
-        if (isClass (configFile >> "CfgMagazines" >> _x)) then {
-            private _magazineCfg = configFile >> "CfgMagazines" >> _x;
-            private _category = ["ammo", "misc"] select ([_magazineCfg] call FLO_fnc_storeIsItemBackedMagazine);
-
-            [_itemsByCategory, _seen, _x, "gear", _category] call FLO_fnc_storeAppendCatalogItem;
-        };
+        [_itemsByCategory, _seen, _x] call FLO_fnc_storeAppendGearMagazine;
     } forEach _magazines;
+
+    [_itemsByCategory, _seen, _unitCfg] call FLO_fnc_storeAppendContainerCargoItems;
 
     private _uniform = getText (_unitCfg >> "uniformClass");
     [_itemsByCategory, _seen, _uniform, "gear", "uniforms"] call FLO_fnc_storeAppendCatalogItem;
 
     private _backpack = getText (_unitCfg >> "backpack");
     [_itemsByCategory, _seen, _backpack, "gear", "backpacks"] call FLO_fnc_storeAppendCatalogItem;
+
+    if ((_backpack isNotEqualTo "") && {isClass (configFile >> "CfgVehicles" >> _backpack)}) then {
+        [_itemsByCategory, _seen, configFile >> "CfgVehicles" >> _backpack] call FLO_fnc_storeAppendContainerCargoItems;
+    };
 } forEach ("true" configClasses (configFile >> "CfgVehicles"));
 
 {

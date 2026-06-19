@@ -79,7 +79,8 @@ if ((typeName _gearEntries) isNotEqualTo "ARRAY") exitWith {};
 
                 player addWeapon _className;
             };
-            case "ammo": {
+            case "ammo";
+            case "mines": {
                 for "_i" from 1 to _quantity do {
                     [player, _className, _container] call FLO_fnc_storeAddInventoryItem;
                 };
@@ -98,6 +99,6 @@ if ((typeName _gearEntries) isNotEqualTo "ARRAY") exitWith {};
             };
         };
     } forEach _gearEntries;
-} forEach ["uniforms", "vests", "backpacks", "headgear", "facewear", "primary", "handgun", "secondary", "attachments", "misc", "ammo"];
+} forEach ["uniforms", "vests", "backpacks", "headgear", "facewear", "primary", "handgun", "secondary", "attachments", "misc", "ammo", "mines"];
 
 ["Purchased kit applied.", "success", "Store"] call FLO_fnc_notify;

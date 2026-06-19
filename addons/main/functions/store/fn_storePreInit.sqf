@@ -3,6 +3,8 @@ FLO_StoreBrowserIdc = 9801;
 FLO_StoreActiveFobNetId = "";
 FLO_StoreClientPendingVehicles = [];
 FLO_StorePurchasedVehicleKilledEh = -1;
+FLO_StorePlaceableMagazineCache = createHashMap;
+FLO_StorePlaceableMagazineCacheReady = false;
 FLO_StoreDeploymentFundAmount = 1000;
 FLO_StoreDeploymentFundMaxItemPrice = 650;
 FLO_StoreDeploymentFundCategories = [
@@ -29,6 +31,7 @@ FLO_StoreCategories = [
     ["backpacks", "Backpacks"],
     ["attachments", "Attachments"],
     ["ammo", "Ammo"],
+    ["mines", "Mines"],
     ["misc", "Items"],
     ["tickets", "Tickets"],
     ["cars", "Cars"],
@@ -51,6 +54,7 @@ FLO_StoreGearCategories = [
     "backpacks",
     "attachments",
     "ammo",
+    "mines",
     "misc"
 ];
 

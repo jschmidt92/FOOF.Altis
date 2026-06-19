@@ -11,6 +11,7 @@ private _base = switch (_category) do {
     case "backpacks": { 80 };
     case "attachments": { 75 };
     case "ammo": { 10 };
+    case "mines": { 140 };
     case "misc": { 25 };
     case "cars": { 800 };
     case "armor": { 3500 };
@@ -26,6 +27,7 @@ if (_entryKind isEqualTo "vehicle") exitWith {
 };
 
 private _mass = 0;
+private _minePriceAdd = 0;
 private _weaponCfg = configNull;
 private _itemKind = "";
 
@@ -44,6 +46,25 @@ if (isClass (configFile >> "CfgWeapons" >> _className)) then {
 if (isClass (configFile >> "CfgMagazines" >> _className)) then {
     private _cfg = configFile >> "CfgMagazines" >> _className;
     _mass = getNumber (_cfg >> "mass");
+
+    if (_category isEqualTo "mines") then {
+        private _ammoClass = getText (_cfg >> "ammo");
+        private _ammoCfg = configFile >> "CfgAmmo" >> _ammoClass;
+
+        if (isClass _ammoCfg) then {
+            private _simulation = toLower getText (_ammoCfg >> "simulation");
+            private _hit = getNumber (_ammoCfg >> "hit");
+            private _indirectHit = getNumber (_ammoCfg >> "indirectHit");
+            private _indirectRange = getNumber (_ammoCfg >> "indirectHitRange");
+            private _blastScore = (_hit * 0.25) + (_indirectHit * 0.35) + (_indirectRange * 7);
+
+            _minePriceAdd = _minePriceAdd + (ceil (_blastScore / 5) * 5);
+
+            if (_simulation isEqualTo "shotdirectionalbomb") then {
+                _minePriceAdd = _minePriceAdd + 80;
+            };
+        };
+    };
 };
 
 if (isClass (configFile >> "CfgVehicles" >> _className)) then {
@@ -52,6 +73,10 @@ if (isClass (configFile >> "CfgVehicles" >> _className)) then {
 };
 
 private _price = _base + (ceil (_mass / 6));
+
+if (_minePriceAdd > 0) then {
+    _price = _price + _minePriceAdd;
+};
 
 if (!isNull _weaponCfg) then {
     private _visionTraits = [_className] call FLO_fnc_storeGearVisionTraits;

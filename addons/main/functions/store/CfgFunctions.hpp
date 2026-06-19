@@ -5,6 +5,9 @@ class Store {
     class storeAddInventoryItem {};
     class storeApplyKit {};
     class storeAppendCatalogItem {};
+    class storeAppendContainerCargoItems {};
+    class storeAppendGearMagazine {};
+    class storeAppendGearWeapon {};
     class storeAppendSupportItems {};
     class storeBuildCatalog {};
     class storeBuildCatalogItem {};
@@ -20,6 +23,7 @@ class Store {
     class storeGearVisionTraits {};
     class storeHandleUiEvent {};
     class storeInitServer {};
+    class storeIsMineMagazine {};
     class storeIsItemBackedMagazine {};
     class storeIsVanillaConfig {};
     class storeIsVanillaDefaultNvg {};

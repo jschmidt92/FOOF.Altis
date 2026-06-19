@@ -5,7 +5,7 @@ private _cfg = configNull;
 if (_entryKind isEqualTo "vehicle") then {
     _cfg = configFile >> "CfgVehicles" >> _className;
 } else {
-    if (_category isEqualTo "ammo") then {
+    if (_category in ["ammo", "mines"]) then {
         _cfg = configFile >> "CfgMagazines" >> _className;
     } else {
         if (_category isEqualTo "backpacks") then {
