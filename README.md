@@ -54,6 +54,7 @@ FOOF currently requires CBA_A3.
 - Custom deployment panel for FOB/COP placement opens through the CBA keybind `Ctrl+Shift+D` by default.
 - IDS Logistics build menu attached to friendly base buildings for commander-authorized construction.
 - Server-validated logistics placement, movement, and deletion inside friendly base build areas.
+- IDS Logistics build camera clamps client view/object distance to the active FOB/COP build radius while active, then restores the player's prior settings on exit.
 - Store attached to friendly FOB buildings for same-side faction equipment and vehicle purchases.
 - Store catalogs are generated from the selected faction's loaded config classes; no player-edited store definition files are required.
 - Store attachment catalogs include attachments actually mounted on selected-faction weapon variants; broad weapon-slot compatible attachment expansion is intentionally disabled.
@@ -62,7 +63,7 @@ FOOF currently requires CBA_A3.
 - Store catalogs also append optional support gear without player-edited definitions: reviewed vanilla GPS and cTab/NSWDG device classes plus source-filtered ACRE/TFAR radio and ACE/KAT/ACM support items when those mods are loaded. Optional support mods follow a Forge-style model: detect the loaded `CfgPatches` entry, then include visible classes whose class/source tokens match that mod.
 - Each player receives a one-time `$1000` Deployment Fund for the current persistence save. It is UID-based, spends before faction balance on eligible personal gear, and disappears from the Store UI once fully spent.
 - Vanilla Arma voice/comms channels are disabled addon-side while side text chat remains available. When ACRE is loaded, FOOF enables side-separated Babel languages and side-separated radio frequencies so BLUFOR and OPFOR start on isolated comms.
-- Store uses a cinematic tactical armory UI with item previews, equipment/cart summaries, personal saved kits, and clickable cart targets for putting ammo/items into uniform, vest, or backpack during checkout.
+- Store uses a cinematic tactical armory UI with item previews, checkout summaries, personal saved kits, and clickable cart targets for putting ammo/items into uniform, vest, or backpack during checkout. Saved kits are captured from the player's currently equipped loadout and reload into the cart for normal server validation.
 - Store vehicle checkout creates a pending vehicle placement; the player places the purchased vehicle with the IDS camera inside the purchase FOB build radius.
 - Empty Store-purchased friendly vehicles and captured enemy vehicles can be recovered at friendly bases for partial money returns.
 - Server-owned BLUFOR/OPFOR ticket pools control respawn allowance; respawns spend one side ticket.

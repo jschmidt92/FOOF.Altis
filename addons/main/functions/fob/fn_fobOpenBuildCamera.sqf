@@ -31,4 +31,4 @@ if ((player distance2D _fob) > _buildRadius) exitWith {
 missionNamespace setVariable ["FLO_LogisticsActiveBaseId", _fob getVariable ["FLO_FOB_Id", ""]];
 missionNamespace setVariable ["FLO_LogisticsActiveCategories", +(_fob getVariable ["FLO_FOB_LogisticsCategories", []])];
 
-[player] call IDS_Logistics_fnc_initBuildCamera;
+[player, false, _buildRadius] call IDS_Logistics_fnc_initBuildCamera;
