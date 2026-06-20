@@ -23,7 +23,7 @@
 if (!IDS_Logistics_isHolding || isNull IDS_Logistics_currentEntity) exitWith { ["No entity to place.", 2] call IDS_Logistics_fnc_cameraHint; };
 
 // Ensure camera mode is active
-private _camera = missionNamespace getVariable ["IDS_LOGISTICS_CAM", objNull];
+private _camera = missionNamespace getVariable ["IDS_Logistics_Cam", objNull];
 if (isNull _camera) exitWith { ["Camera mode is not active.", 2] call IDS_Logistics_fnc_cameraHint; };
 
 // Extract entity properties before deletion
@@ -54,11 +54,20 @@ if (_storePurchaseId isNotEqualTo "") then {
 };
 
 // Clean up event handlers
-if (!isNil "IDS_Logistics_scrollHandler") then { (findDisplay 46) displayRemoveEventHandler ["MouseZChanged", IDS_Logistics_scrollHandler]; };
-if (!isNil "IDS_Logistics_keyDownHandler") then { (findDisplay 46) displayRemoveEventHandler ["KeyDown", IDS_Logistics_keyDownHandler]; };
-if (!isNil "IDS_Logistics_keyUpHandler") then { (findDisplay 46) displayRemoveEventHandler ["KeyUp", IDS_Logistics_keyUpHandler]; };
-if (!isNil "IDS_Logistics_dirUpdateEH") then { [IDS_Logistics_dirUpdateEH] call CBA_fnc_removePerFrameHandler; };
+private _scroll = missionNamespace getVariable ["IDS_Logistics_scrollHandler", -1];
+if (_scroll isNotEqualTo -1) then { (findDisplay 46) displayRemoveEventHandler ["MouseZChanged", _scroll]; IDS_Logistics_scrollHandler = nil; };
+private _keyDownEH = missionNamespace getVariable ["IDS_Logistics_keyDownHandler", -1];
+if (_keyDownEH isNotEqualTo -1) then { (findDisplay 46) displayRemoveEventHandler ["KeyDown", _keyDownEH]; IDS_Logistics_keyDownHandler = nil; };
+private _keyUpEH = missionNamespace getVariable ["IDS_Logistics_keyUpHandler", -1];
+if (_keyUpEH isNotEqualTo -1) then { (findDisplay 46) displayRemoveEventHandler ["KeyUp", _keyUpEH]; IDS_Logistics_keyUpHandler = nil; };
+private _dirUpdate = missionNamespace getVariable ["IDS_Logistics_dirUpdateEH", -1];
+if (_dirUpdate isNotEqualTo -1) then { [_dirUpdate] call CBA_fnc_removePerFrameHandler; IDS_Logistics_dirUpdateEH = nil; };
 
 // Reset global state variables
 IDS_Logistics_isHolding = false;
 IDS_Logistics_currentEntity = objNull;
+
+// If placing a new object (not a pickup and not a store purchase), automatically start placement again
+if (_originalNetId isEqualTo "" && _storePurchaseId isEqualTo "") then {
+    [_className] call IDS_Logistics_fnc_startPlacement;
+};

@@ -31,25 +31,25 @@ params [
 ];
 
 // Check if camera exists, if not just exit after clearing
-if (isNil "IDS_LOGISTICS_CAM" || {isNull IDS_LOGISTICS_CAM}) exitWith {
+if (isNil "IDS_Logistics_Cam" || {isNull IDS_Logistics_Cam}) exitWith {
     // Camera doesn't exist, so clear any existing hints
-    if (!isNil "IDS_LOGISTICS_CAM_HINT_LAYER") then {
-        IDS_LOGISTICS_CAM_HINT_LAYER cutText ["", "PLAIN"];
+    if (!isNil "IDS_Logistics_CamHintLayer") then {
+        IDS_Logistics_CamHintLayer cutText ["", "PLAIN"];
     };
-    if (!isNil "IDS_LOGISTICS_CAM_FLASH_LAYER") then {
-        IDS_LOGISTICS_CAM_FLASH_LAYER cutText ["", "PLAIN"];
+    if (!isNil "IDS_Logistics_CamFlashLayer") then {
+        IDS_Logistics_CamFlashLayer cutText ["", "PLAIN"];
     };
 };
 
 // Create hint layers if they don't exist
-if (isNil "IDS_LOGISTICS_CAM_HINT_LAYER") then { IDS_LOGISTICS_CAM_HINT_LAYER = ["IDS_Logistics_Camera_Hint"] call BIS_fnc_rscLayer; };
+if (isNil "IDS_Logistics_CamHintLayer") then { IDS_Logistics_CamHintLayer = ["IDS_Logistics_Camera_Hint"] call BIS_fnc_rscLayer; };
 
-if (isNil "IDS_LOGISTICS_CAM_FLASH_LAYER") then { IDS_LOGISTICS_CAM_FLASH_LAYER = ["IDS_Logistics_Camera_Flash"] call BIS_fnc_rscLayer; };
+if (isNil "IDS_Logistics_CamFlashLayer") then { IDS_Logistics_CamFlashLayer = ["IDS_Logistics_Camera_Flash"] call BIS_fnc_rscLayer; };
 
 // Handle clearing only
 if (_clearOnly) exitWith {
-    IDS_LOGISTICS_CAM_HINT_LAYER cutText ["", "PLAIN"];
-    IDS_LOGISTICS_CAM_FLASH_LAYER cutText ["", "PLAIN"];
+    IDS_Logistics_CamHintLayer cutText ["", "PLAIN"];
+    IDS_Logistics_CamFlashLayer cutText ["", "PLAIN"];
 };
 
 // Determine header title based on the type of hint
@@ -75,7 +75,7 @@ private _headerTextColor = "#FFFFFF"; // White header text
 // Choose which layer to use based on duration
 if (_duration > 0) then {
     // Flash hints (temporary notifications) - top right
-    IDS_LOGISTICS_CAM_FLASH_LAYER cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
+    IDS_Logistics_CamFlashLayer cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
     
     private _display = uiNamespace getVariable "RscTitleDisplayEmpty";
     
@@ -138,7 +138,7 @@ if (_duration > 0) then {
         
         // Wait for duration
         private _endTime = time + _duration;
-        waitUntil { time >= _endTime || (isNil "IDS_LOGISTICS_CAM" || { isNull IDS_LOGISTICS_CAM }) };
+        waitUntil { time >= _endTime || (isNil "IDS_Logistics_Cam" || { isNull IDS_Logistics_Cam }) };
         
         // If container still exists, fade it out
         if (!isNull _container) then {
@@ -150,7 +150,7 @@ if (_duration > 0) then {
     };
 } else {
     // Persistent hints - bottom right
-    IDS_LOGISTICS_CAM_HINT_LAYER cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
+    IDS_Logistics_CamHintLayer cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
     
     private _display = uiNamespace getVariable "RscTitleDisplayEmpty";
     
@@ -212,10 +212,10 @@ if (_duration > 0) then {
     // Start monitoring for camera existence
     [_container] spawn {
         params ["_container"];
-        waitUntil {isNil "IDS_LOGISTICS_CAM" || { isNull IDS_LOGISTICS_CAM } || {isNull _container}};
+        waitUntil {isNil "IDS_Logistics_Cam" || { isNull IDS_Logistics_Cam } || {isNull _container}};
         
         // If container still exists but camera doesn't, remove it
-        if (!isNull _container && (isNil "IDS_LOGISTICS_CAM" || { isNull IDS_LOGISTICS_CAM })) then {
+        if (!isNull _container && (isNil "IDS_Logistics_Cam" || { isNull IDS_Logistics_Cam })) then {
             _container ctrlSetFade 1;
             _container ctrlCommit 0.5;
             sleep 0.5;

@@ -333,7 +333,8 @@ if ("fobs" in _snapshot) then {
                     private _type = ["FOB", _record get "type"] select ("type" in _record);
                     private _fob = createVehicle [_className, [0, 0, 0], [], 0, "CAN_COLLIDE"];
                     [_fob, _x] call FLO_fnc_persistenceRestoreObjectState;
-                    private _fobId = [_fob, _side, _record get "ownerUid", _record get "id", _record get "buildRadius", _type] call FLO_fnc_fobRegister;
+                    private _anchorPosASL = [_record get "posASL", _record get "anchorPosASL"] select ("anchorPosASL" in _record);
+                    private _fobId = [_fob, _side, _record get "ownerUid", _record get "id", _record get "buildRadius", _type, _anchorPosASL] call FLO_fnc_fobRegister;
                 };
             };
         } forEach (_fobs get "records");

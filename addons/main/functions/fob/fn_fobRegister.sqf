@@ -1,4 +1,4 @@
-params ["_fob", "_side", ["_ownerUid", ""], ["_forcedId", ""], ["_buildRadius", -1], ["_baseType", "FOB"]];
+params ["_fob", "_side", ["_ownerUid", ""], ["_forcedId", ""], ["_buildRadius", -1], ["_baseType", "FOB"], ["_anchorPosASL", [], [[]]]];
 
 if (!isServer) exitWith {};
 if (isNull _fob) then {
@@ -19,12 +19,17 @@ if (_buildRadius < 0) then {
     _buildRadius = _config get "buildRadius";
 };
 
+if (_anchorPosASL isEqualTo []) then {
+    _anchorPosASL = _fob getVariable ["FLO_FOB_AnchorPosASL", getPosASL _fob];
+};
+
 private _markerId = format ["FLO_FOB_%1", _id];
 
 _fob setVariable ["FLO_FOB_Id", _id, true];
 _fob setVariable ["FLO_FOB_Type", _type, true];
 _fob setVariable ["FLO_FOB_SideKey", _sideKey, true];
 _fob setVariable ["FLO_FOB_BuildRadius", _buildRadius, true];
+_fob setVariable ["FLO_FOB_AnchorPosASL", _anchorPosASL, true];
 _fob setVariable ["FLO_FOB_OwnerUid", _ownerUid, true];
 _fob setVariable ["FLO_FOB_LogisticsCategories", +(_config get "logisticsCategories"), true];
 _fob setVariable ["FLO_FOB_StoreEnabled", _config get "storeEnabled", true];
@@ -44,6 +49,7 @@ FLO_FOBs set [
         ["ownerUid", _ownerUid],
         ["marker", _markerId],
         ["buildRadius", _buildRadius],
+        ["anchorPosASL", _anchorPosASL],
         ["logisticsCategories", +(_config get "logisticsCategories")],
         ["storeEnabled", _config get "storeEnabled"],
         ["vehicleStoreEnabled", _config get "vehicleStoreEnabled"],

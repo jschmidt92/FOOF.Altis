@@ -22,6 +22,7 @@ class IDS_Logistics {
         class deleteEntity {};
         class finalizeEntity {};
         class onEntityKilled {};
+        class spawnEntity {};
         class toggleEntityVisibility {};
     };
 

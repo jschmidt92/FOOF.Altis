@@ -59,6 +59,8 @@ private _fail = {
         ["message", _message],
         ["id", _purchaseId]
     ]] call _send;
+
+    false;
 };
 
 if (_index < 0) exitWith {
@@ -136,10 +138,9 @@ if (_needsWater isNotEqualTo (surfaceIsWater _finalPosAGL)) exitWith {
     };
 };
 
-private _vehicle = createVehicle [_className, _finalPosAGL, [], 0, "CAN_COLLIDE"];
-_vehicle setPosASL _finalPos;
-_vehicle setDir _finalDir;
-_vehicle setVectorUp _vectorUp;
+private _vehicle = [_className, _finalPos, _finalDir, _vectorUp] call IDS_Logistics_fnc_spawnEntity;
+if (isNull _vehicle) exitWith { ["Vehicle placement failed."] call _fail; };
+
 _vehicle lock 0;
 
 [
@@ -160,3 +161,5 @@ FLO_StorePendingVehicles deleteAt _index;
     ["id", _purchaseId],
     ["netId", netId _vehicle]
 ]] call _send;
+
+true;

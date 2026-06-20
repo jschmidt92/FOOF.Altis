@@ -169,6 +169,7 @@ private _fobRecords = [];
         _objectRecord pushBack ["sideKey", _record get "sideKey"];
         _objectRecord pushBack ["ownerUid", _record get "ownerUid"];
         _objectRecord pushBack ["buildRadius", _record get "buildRadius"];
+        _objectRecord pushBack ["anchorPosASL", _record get "anchorPosASL"];
         _fobRecords pushBack _objectRecord;
     };
 } forEach keys FLO_FOBs;

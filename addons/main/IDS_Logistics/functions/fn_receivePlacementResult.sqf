@@ -11,7 +11,7 @@ private _content = if (_success) then {
     format ["<t color='#FF4444'>ERROR</t><br/>%1", _message]
 };
 
-if (isNil "IDS_LOGISTICS_CAM" || {isNull IDS_LOGISTICS_CAM}) then {
+if (isNil "IDS_Logistics_Cam" || {isNull IDS_Logistics_Cam}) then {
     [_message, ["error", "success"] select _success, "Logistics"] call FLO_fnc_notify;
 } else {
     [_content, [3, 2] select _success] call IDS_Logistics_fnc_cameraHint;

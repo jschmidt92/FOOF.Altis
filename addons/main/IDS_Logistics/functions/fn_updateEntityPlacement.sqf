@@ -21,29 +21,31 @@
  */
 
 if (!IDS_Logistics_isHolding || isNull IDS_Logistics_currentEntity) exitWith {};
-if (isNil "IDS_LOGISTICS_CAM" || { isNull IDS_LOGISTICS_CAM }) exitWith {};
+if (isNil "IDS_Logistics_Cam" || { isNull IDS_Logistics_Cam }) exitWith {};
 
-// Calculate base height
-private _baseHeight = ((boundingBoxReal IDS_Logistics_currentEntity) select 1 select 2) - ((boundingBoxReal IDS_Logistics_currentEntity) select 0 select 2);
-private _centerHeight = _baseHeight / 2; // Calculate the center height of the object
+// Offset the model origin so the bottom of its bounding box rests on the surface.
+// Half the total model height is incorrect when the model origin is not centered,
+// and can leave vehicles suspended far enough to damage them when simulation starts.
+private _boundingBox = boundingBoxReal IDS_Logistics_currentEntity;
+private _centerHeight = -((_boundingBox select 0) select 2) max 0;
 
 // Store the center height on the object for use during finalization
 IDS_Logistics_currentEntity setVariable ["IDS_Logistics_CenterHeight", _centerHeight];
 
 // Use camera for positioning
-private _referencePos = getPosASL IDS_LOGISTICS_CAM;
+private _referencePos = getPosASL IDS_Logistics_Cam;
 private _referenceDir = 0;
 private _forwardVector = [];
 
 // Try multiple methods to get reliable camera view direction - better for freelook mode
-_forwardVector = vectorDir IDS_LOGISTICS_CAM; // More reliable in all camera modes
+_forwardVector = vectorDir IDS_Logistics_Cam; // More reliable in all camera modes
 
 // If vectorDir fails (returns [0,0,0]), try getCameraViewDirection
-if (_forwardVector isEqualTo [0,0,0]) then { _forwardVector = getCameraViewDirection IDS_LOGISTICS_CAM; };
+if (_forwardVector isEqualTo [0,0,0]) then { _forwardVector = getCameraViewDirection IDS_Logistics_Cam; };
 
 // If that still fails, calculate from camera angle
 if (_forwardVector isEqualTo [0,0,0]) then {
-    private _camDirection = getDir IDS_LOGISTICS_CAM;
+    private _camDirection = getDir IDS_Logistics_Cam;
     _forwardVector = [sin _camDirection, cos _camDirection, 0];
 };
 

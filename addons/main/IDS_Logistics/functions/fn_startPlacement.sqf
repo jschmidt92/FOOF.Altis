@@ -29,7 +29,7 @@ if (_className == "") exitWith { ["<t color='#FF4444'>ERROR</t><br/>No entity cl
 if (IDS_Logistics_isHolding) exitWith { ["<t color='#FFAA44'>NOTICE</t><br/>You are already placing an entity.", 2] call IDS_Logistics_fnc_cameraHint; };
 
 // Ensure camera mode is active
-private _camera = missionNamespace getVariable ["IDS_LOGISTICS_CAM", objNull];
+private _camera = missionNamespace getVariable ["IDS_Logistics_Cam", objNull];
 if (isNull _camera) exitWith { ["Camera mode is not active.", 2] call IDS_Logistics_fnc_cameraHint; };
 
 // Get entity configuration
@@ -91,7 +91,7 @@ IDS_Logistics_scrollHandler = (findDisplay 46) displayAddEventHandler ["MouseZCh
         if (IDS_Logistics_entityRotation >= 360) then { IDS_Logistics_entityRotation = IDS_Logistics_entityRotation - 360; };
         
         // Update UI
-        private _cam = missionNamespace getVariable ["IDS_LOGISTICS_CAM", objNull];
+        private _cam = missionNamespace getVariable ["IDS_Logistics_Cam", objNull];
         private _camDir = getCameraViewDirection _cam;
         private _refDir = (_camDir select 0) atan2 (_camDir select 1);
 

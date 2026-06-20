@@ -33,7 +33,12 @@ if (!([_player, "logistics"] call FLO_fnc_commandPlayerHasAuthority)) exitWith {
 
 private _sideKey = [_side] call FLO_fnc_resourceSideKey;
 
-if ((_entity getVariable ["IDS_Logistics_SideKey", ""]) isNotEqualTo _sideKey) exitWith {
+private _entitySideKey = _entity getVariable ["IDS_Logistics_SideKey", ""];
+if (_entitySideKey isEqualTo "") then {
+    _entitySideKey = _entity getVariable ["FLO_FOB_SideKey", ""];
+};
+
+if (_entitySideKey isNotEqualTo _sideKey) exitWith {
     [false, "You cannot move the other faction's logistics objects."] remoteExecCall ["IDS_Logistics_fnc_receivePlacementResult", _owner];
 };
 

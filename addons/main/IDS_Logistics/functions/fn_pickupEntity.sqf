@@ -25,14 +25,19 @@ if (isNull _entity) exitWith {};
 if (IDS_Logistics_isHolding) exitWith { ["You are already holding an entity.", 2] call IDS_Logistics_fnc_cameraHint; };
 
 // Ensure camera mode is active
-if (isNil "IDS_LOGISTICS_CAM" || { isNull IDS_LOGISTICS_CAM }) exitWith { ["Camera mode is not active.", 2] call IDS_Logistics_fnc_cameraHint; };
+if (isNil "IDS_Logistics_Cam" || { isNull IDS_Logistics_Cam }) exitWith { ["Camera mode is not active.", 2] call IDS_Logistics_fnc_cameraHint; };
 
 private _sideKey = [side group player] call FLO_fnc_resourceSideKey;
 if (!([player, "logistics"] call FLO_fnc_commandPlayerHasAuthority)) exitWith {
     ["Only the side commander can use FOB logistics right now.", 2] call IDS_Logistics_fnc_cameraHint;
 };
 
-if ((_entity getVariable ["IDS_Logistics_SideKey", ""]) isNotEqualTo _sideKey) exitWith {
+private _entitySideKey = _entity getVariable ["IDS_Logistics_SideKey", ""];
+if (_entitySideKey isEqualTo "") then {
+    _entitySideKey = _entity getVariable ["FLO_FOB_SideKey", ""];
+};
+
+if (_entitySideKey isNotEqualTo _sideKey) exitWith {
     ["You cannot move the other faction's logistics objects.", 2] call IDS_Logistics_fnc_cameraHint;
 };
 
@@ -74,12 +79,12 @@ IDS_Logistics_currentEntity = _localEntity;
 ["Entity picked up: " + _className, 2] call IDS_Logistics_fnc_cameraHint;
 
 // Check if using camera mode or player mode
-private _useCameraMode = !isNil "IDS_LOGISTICS_CAM" && { !isNull IDS_LOGISTICS_CAM };
+private _useCameraMode = !isNil "IDS_Logistics_Cam" && { !isNull IDS_Logistics_Cam };
 
 // Calculate initial placement variables
 if (_useCameraMode) then {
     // Get camera view direction
-    private _camDir = getCameraViewDirection IDS_LOGISTICS_CAM;
+    private _camDir = getCameraViewDirection IDS_Logistics_Cam;
     private _cameraDir = (_camDir select 0) atan2 (_camDir select 1);
 
     if (_cameraDir < 0) then { _cameraDir = _cameraDir + 360; };
@@ -89,7 +94,7 @@ if (_useCameraMode) then {
     if (IDS_Logistics_entityRotation < 0) then { IDS_Logistics_entityRotation = IDS_Logistics_entityRotation + 360; };
 
     // Calculate distance from camera to entity
-    private _cameraPos = getPosASL IDS_LOGISTICS_CAM;
+    private _cameraPos = getPosASL IDS_Logistics_Cam;
     private _distanceVector = [
         (_originalPos select 0) - (_cameraPos select 0),
         (_originalPos select 1) - (_cameraPos select 1),
@@ -133,8 +138,8 @@ IDS_Logistics_scrollHandler = (findDisplay 46) displayAddEventHandler ["MouseZCh
         private _refDir = 0;
         private _refName = "Player";
 
-        if (!isNil "IDS_LOGISTICS_CAM" && {!isNull IDS_LOGISTICS_CAM}) then {
-            private _camDir = getCameraViewDirection IDS_LOGISTICS_CAM;
+        if (!isNil "IDS_Logistics_Cam" && {!isNull IDS_Logistics_Cam}) then {
+            private _camDir = getCameraViewDirection IDS_Logistics_Cam;
             _refDir = (_camDir select 0) atan2 (_camDir select 1);
 
             if (_refDir < 0) then { _refDir = _refDir + 360; };
