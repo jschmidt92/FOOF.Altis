@@ -25,7 +25,7 @@ if (isNull _fob) exitWith {
 
 closeDialog 0;
 
-private _activeCamera = missionNamespace getVariable ["IDS_LOGISTICS_CAM", objNull];
+private _activeCamera = missionNamespace getVariable ["IDS_Logistics_Cam", objNull];
 private _buildRadius = _fob getVariable ["FLO_FOB_BuildRadius", FLO_FOBBuildRadius];
 
 if (isNull _activeCamera) then {

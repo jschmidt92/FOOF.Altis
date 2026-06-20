@@ -26,5 +26,3 @@ FLO_IntelBaseFinds = createHashMapFromArray [
     ["WEST", 0],
     ["EAST", 0]
 ];
-
-FLO_IntelWebActionInvoker = compile "params ['_control', '_args']; _control ctrlWebBrowserAction _args;";

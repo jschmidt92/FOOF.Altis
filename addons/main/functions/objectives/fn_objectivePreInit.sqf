@@ -11,4 +11,3 @@ FLO_ObjectiveSnapshot = [];
 FLO_ObjectiveGridSnapshot = [];
 FLO_ObjectiveSnapshotDelta = [];
 FLO_ObjectiveGridSnapshotDelta = [];
-FLO_ObjectiveAreaWebActionInvoker = compile "params ['_control', '_args']; _control ctrlWebBrowserAction _args;";

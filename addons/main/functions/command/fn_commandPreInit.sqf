@@ -8,7 +8,6 @@ FLO_CommandVoteOpenWhenReady = false;
 FLO_CommandClientSnapshotRetryHandle = -1;
 FLO_CommandBroadcastPending = createHashMap;
 FLO_CommandSnapshotRequestTimes = createHashMap;
-FLO_CommandWebActionInvoker = compile "params ['_control', '_args']; _control ctrlWebBrowserAction _args;";
 FLO_CommandInitialVoteDuration = 180;
 FLO_CommandReplacementVoteDuration = 120;
 FLO_CommandRoleOrder = ["deputy", "medic", "doctor", "engineer"];
