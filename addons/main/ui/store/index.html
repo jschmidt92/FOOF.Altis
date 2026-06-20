@@ -261,7 +261,7 @@
         }
 
         .operator-panel {
-            grid-template-rows: auto minmax(0, 0.72fr) minmax(0, 1.72fr) minmax(0, 0.44fr);
+            grid-template-rows: auto minmax(0, 1.35fr) minmax(0, 0.95fr);
             min-height: 0;
             overflow: hidden auto;
             overscroll-behavior: contain;
@@ -678,79 +678,6 @@
             padding: 2px 10px 24px 0;
             scroll-padding-bottom: 24px;
             scrollbar-gutter: stable;
-        }
-
-        .loadout-grid {
-            display: grid;
-            flex: 1 1 auto;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
-            min-height: 0;
-            overflow: auto;
-            overscroll-behavior: contain;
-            padding: 2px 10px 22px 0;
-            scroll-padding-bottom: 22px;
-            scrollbar-gutter: stable;
-        }
-
-        .slot {
-            min-height: 78px;
-            padding: 10px;
-            background: rgba(20, 34, 48, 0.82);
-            box-shadow: inset 0 0 0 1px rgba(103, 232, 255, 0.13);
-            clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
-        }
-
-        .slot.wide {
-            grid-column: 1 / -1;
-        }
-
-        .slot.empty {
-            background: rgba(4, 10, 16, 0.38);
-        }
-
-        .slot-title {
-            color: #66788A;
-            font-size: 12px;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-
-        .slot-value {
-            margin-top: 7px;
-            overflow: hidden;
-            color: #F2F7FA;
-            font-size: 17px;
-            font-weight: 900;
-            text-overflow: ellipsis;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .slot.empty .slot-value {
-            color: #66788A;
-        }
-
-        .slot-lines {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-top: 7px;
-        }
-
-        .slot-line {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            gap: 10px;
-            color: #A7B7C8;
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .slot-line span:first-child {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .cart-line,
@@ -1280,16 +1207,6 @@
                 <section class="operator-section">
                     <div class="panel-head">
                         <div class="panel-title">
-                            <div class="overline">Loadout</div>
-                            <h2>Slots</h2>
-                        </div>
-                    </div>
-                    <div class="loadout-grid" id="loadoutPreview"></div>
-                </section>
-
-                <section class="operator-section">
-                    <div class="panel-head">
-                        <div class="panel-title">
                             <div class="overline">Checkout</div>
                             <h2>Cart</h2>
                         </div>
@@ -1398,17 +1315,6 @@
                 static: true,
                 other: true
             };
-
-            var equipmentSlots = [
-                ["primary", "Primary"],
-                ["secondary", "Launcher"],
-                ["handgun", "Handgun"],
-                ["uniforms", "Uniform"],
-                ["vests", "Vest"],
-                ["backpacks", "Backpack"],
-                ["headgear", "Headgear"],
-                ["facewear", "Facewear"]
-            ];
 
             function send(event, data) {
                 var payload = JSON.stringify({ event: event, data: data || {} });
@@ -2046,51 +1952,6 @@
                 modal.className = "modal-backdrop";
             }
 
-            function createSlot(title, lines, wide) {
-                var slot = document.createElement("div");
-                var slotTitle = document.createElement("div");
-                var i;
-
-                slot.className = "slot" + (wide ? " wide" : "") + (lines.length === 0 ? " empty" : "");
-                slotTitle.className = "slot-title";
-                slotTitle.textContent = title;
-                slot.appendChild(slotTitle);
-
-                if (lines.length === 0) {
-                    var emptyValue = document.createElement("div");
-                    emptyValue.className = "slot-value";
-                    emptyValue.textContent = "Open";
-                    slot.appendChild(emptyValue);
-                    return slot;
-                }
-
-                if (lines.length === 1) {
-                    var value = document.createElement("div");
-                    value.className = "slot-value";
-                    value.textContent = lines[0].name;
-                    slot.appendChild(value);
-                    return slot;
-                }
-
-                var stack = document.createElement("div");
-                stack.className = "slot-lines";
-
-                for (i = 0; i < lines.length; i += 1) {
-                    var row = document.createElement("div");
-                    var name = document.createElement("span");
-                    var quantity = document.createElement("span");
-                    row.className = "slot-line";
-                    name.textContent = lines[i].name;
-                    quantity.textContent = "x" + String(lines[i].quantity);
-                    row.appendChild(name);
-                    row.appendChild(quantity);
-                    stack.appendChild(row);
-                }
-
-                slot.appendChild(stack);
-                return slot;
-            }
-
             function renderTargetButtons() {
                 var target = node("targetRow");
                 var containers = ["auto", "uniform", "vest", "backpack"];
@@ -2112,50 +1973,7 @@
                 }
             }
 
-            function renderLoadoutPreview() {
-                var target = node("loadoutPreview");
-                var byCategory = {};
-                var containers = {
-                    auto: [],
-                    uniform: [],
-                    vest: [],
-                    backpack: []
-                };
-                var vehicles = [];
-                var tickets = [];
-                var i;
-
-                clear(target);
-
-                for (i = 0; i < equipmentSlots.length; i += 1) {
-                    byCategory[equipmentSlots[i][0]] = [];
-                }
-
-                for (i = 0; i < state.cart.length; i += 1) {
-                    var line = state.cart[i];
-
-                    if (line.entryKind === "ticket") {
-                        tickets.push(line);
-                    } else if (isVehicle(line)) {
-                        vehicles.push(line);
-                    } else if (canPack(line)) {
-                        containers[normalizeContainer(line, line.container)].push(line);
-                    } else if (byCategory[line.category]) {
-                        byCategory[line.category].push(line);
-                    }
-                }
-
-                for (i = 0; i < equipmentSlots.length; i += 1) {
-                    target.appendChild(createSlot(equipmentSlots[i][1], byCategory[equipmentSlots[i][0]], false));
-                }
-
-                target.appendChild(createSlot("Auto Items", containers.auto, true));
-                target.appendChild(createSlot("Uniform Cargo", containers.uniform, true));
-                target.appendChild(createSlot("Vest Cargo", containers.vest, true));
-                target.appendChild(createSlot("Backpack Cargo", containers.backpack, true));
-                target.appendChild(createSlot("Vehicle Queue", vehicles, true));
-                target.appendChild(createSlot("Tickets", tickets, true));
-
+            function refreshStoreState() {
                 renderTargetButtons();
                 updateSummary();
             }
@@ -2321,7 +2139,7 @@
 
                 if (state.cart.length === 0) {
                     list.appendChild(empty("Cart is empty."));
-                    renderLoadoutPreview();
+                    refreshStoreState();
                     return;
                 }
 
@@ -2401,7 +2219,7 @@
                     }(state.cart[i]));
                 }
 
-                renderLoadoutPreview();
+                refreshStoreState();
             }
 
             function renderSavedKits() {
@@ -2614,19 +2432,13 @@
                 saveKit: function () {
                     var name = node("kitName").value;
 
-                    if (state.cart.length === 0) {
-                        message("Cart is empty.", "error");
-                        return;
-                    }
-
                     if (!name || !name.replace(/\s/g, "")) {
                         message("Name the kit first.", "error");
                         return;
                     }
 
                     send("store::kitSave", {
-                        name: name,
-                        items: state.cart.map(copyCartLine)
+                        name: name
                     });
                 },
                 loadKit: function (kit) {

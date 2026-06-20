@@ -28,6 +28,7 @@
  * @example
  * [player] call IDS_Logistics_fnc_initBuildCamera                // Enable camera with build menu
  * [player, true] call IDS_Logistics_fnc_initBuildCamera          // Enable camera without build menu
+ * [player, true, 60] call IDS_Logistics_fnc_initBuildCamera      // Enable camera with 60m view clamp
  */
 
 // ---- CAMERA CONFIGURATION SETUP ----
@@ -35,12 +36,16 @@
 // Parse parameters
 private _targetObject = objNull;
 private _buildMenuDisabled = false;
+private _cameraViewDistanceLimit = 35;
 
 if (typeName _this isEqualTo "ARRAY") then {
     if (count _this > 0) then {
         _targetObject = _this select 0;
         if (count _this > 1) then {
             _buildMenuDisabled = _this select 1;
+        };
+        if (count _this > 2) then {
+            _cameraViewDistanceLimit = _this select 2;
         };
     };
 } else {
@@ -91,9 +96,14 @@ showCinemaBorder false;
 IDS_Logistics_Cam setDir direction (vehicle player);
 
 // Store initial camera position for range limitation
-IDS_Logistics_CamInitialPos = [_pX, _pY, _pZ + 2];
-IDS_Logistics_CamMaxDistance = 50; // Maximum distance in meters
-IDS_Logistics_CamAtLimit = false;  // Flag to prevent spam notifications
+IDS_LOGISTICS_CAM_INITIAL_POS = [_pX, _pY, _pZ + 2];
+IDS_LOGISTICS_CAM_MAX_DISTANCE = 50; // Maximum distance in meters
+IDS_LOGISTICS_CAM_AT_LIMIT = false;  // Flag to prevent spam notifications
+IDS_Logistics_PreviousViewDistance = viewDistance;
+IDS_Logistics_PreviousObjectViewDistance = getObjectViewDistance;
+IDS_Logistics_CameraViewDistanceLimit = 50 max (floor _cameraViewDistanceLimit);
+setViewDistance IDS_Logistics_CameraViewDistanceLimit;
+setObjectViewDistance [IDS_Logistics_CameraViewDistanceLimit, IDS_Logistics_CameraViewDistanceLimit];
 
 // Add visual boundary system
 IDS_Logistics_BoundaryEH = [
@@ -523,9 +533,10 @@ _keyDown = (findDisplay 46) displayAddEventHandler ["KeyDown", {
             
             // Clean up camera and effects
             player cameraEffect ["TERMINATE", "BACK"];
-            if (!isNil "IDS_Logistics_CamColor") then { 
-                ppEffectDestroy IDS_Logistics_CamColor;
-                IDS_Logistics_CamColor = nil;
+            [] call IDS_Logistics_fnc_restoreBuildCameraViewDistance;
+            if (!isNil "IDS_LOGISTICS_CAM_COLOR") then { 
+                ppEffectDestroy IDS_LOGISTICS_CAM_COLOR;
+                IDS_LOGISTICS_CAM_COLOR = nil;
             };
             camDestroy IDS_Logistics_Cam;
             
@@ -678,9 +689,10 @@ _keyDown = (findDisplay 46) displayAddEventHandler ["KeyDown", {
 
     // Clean up camera and effects
     player cameraEffect ["TERMINATE", "BACK"];
-    if (!isNil "IDS_Logistics_CamColor") then { 
-        ppEffectDestroy IDS_Logistics_CamColor;
-        IDS_Logistics_CamColor = nil;
+    [] call IDS_Logistics_fnc_restoreBuildCameraViewDistance;
+    if (!isNil "IDS_LOGISTICS_CAM_COLOR") then { 
+        ppEffectDestroy IDS_LOGISTICS_CAM_COLOR;
+        IDS_LOGISTICS_CAM_COLOR = nil;
     };
     camDestroy _local;
 

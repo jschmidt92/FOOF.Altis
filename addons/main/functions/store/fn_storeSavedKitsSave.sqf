@@ -1,4 +1,4 @@
-params ["_name", "_items"];
+params ["_name"];
 
 if (!hasInterface) exitWith {
     createHashMapFromArray [
@@ -8,7 +8,7 @@ if (!hasInterface) exitWith {
     ]
 };
 
-if (((typeName _name) isNotEqualTo "STRING") || {((typeName _items) isNotEqualTo "ARRAY")}) exitWith {
+if ((typeName _name) isNotEqualTo "STRING") exitWith {
     createHashMapFromArray [
         ["success", false],
         ["message", "Invalid kit data."],
@@ -28,10 +28,12 @@ if ((count _name) > 40) then {
     _name = _name select [0, 40];
 };
 
+private _items = [] call FLO_fnc_storeCurrentLoadoutKitItems;
+
 if (((count _items) < 1) || {(count _items) > 60}) exitWith {
     createHashMapFromArray [
         ["success", false],
-        ["message", "Saved kit item count is invalid."],
+        ["message", "Equipped kit item count is invalid."],
         ["kits", [] call FLO_fnc_storeSavedKitsLoad]
     ]
 };
@@ -96,7 +98,7 @@ for "_i" from 0 to ((count _items) - 1) do {
 if (_sanitized isEqualTo []) exitWith {
     createHashMapFromArray [
         ["success", false],
-        ["message", "Saved kit has no usable items."],
+        ["message", "Equipped kit has no usable Store items."],
         ["kits", [] call FLO_fnc_storeSavedKitsLoad]
     ]
 };

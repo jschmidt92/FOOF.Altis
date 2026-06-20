@@ -12,6 +12,7 @@ class IDS_Logistics {
         class pickupEntity {};
         class placeEntity {};
         class receivePlacementResult {};
+        class restoreBuildCameraViewDistance {};
         class startPlacement {};
         class updateEntityPlacement {};
     };

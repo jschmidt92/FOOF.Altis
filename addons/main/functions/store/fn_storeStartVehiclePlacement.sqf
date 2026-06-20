@@ -26,9 +26,10 @@ if (isNull _fob) exitWith {
 closeDialog 0;
 
 private _activeCamera = missionNamespace getVariable ["IDS_LOGISTICS_CAM", objNull];
+private _buildRadius = _fob getVariable ["FLO_FOB_BuildRadius", FLO_FOBBuildRadius];
 
 if (isNull _activeCamera) then {
-    [_fob, true] call IDS_Logistics_fnc_initBuildCamera;
+    [_fob, true, _buildRadius] call IDS_Logistics_fnc_initBuildCamera;
 } else {
     IDS_Logistics_BuildMenuDisabled = true;
 };

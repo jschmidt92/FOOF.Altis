@@ -29,7 +29,7 @@ switch (_event) do {
         ]] call FLO_fnc_storeUpdateDialog;
     };
     case "store::kitSave": {
-        private _payload = [_data get "name", _data get "items"] call FLO_fnc_storeSavedKitsSave;
+        private _payload = [_data get "name"] call FLO_fnc_storeSavedKitsSave;
         ["store::savedKits", _payload] call FLO_fnc_storeUpdateDialog;
     };
     case "store::kitDelete": {
